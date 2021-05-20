@@ -15,6 +15,7 @@ import (
 var safeFilenameReplaceRegex = regexp.MustCompile(`[^a-zA-Z0-9-]+`)
 
 type Product struct {
+	URL        string
 	Name       string
 	Price      string
 	Savings    string
@@ -42,6 +43,7 @@ func main() {
 	runDate := time.Now()
 	c.OnHTML(".product-detail-frame", func(e *colly.HTMLElement) {
 		p := Product{
+			URL:        e.Request.URL.String(),
 			Name:       e.ChildText("h2.product-name"),
 			Price:      e.ChildText("#randPrice"),
 			Savings:    e.ChildText(".was-price > strong:nth-child(1) > span:nth-child(1)"),
