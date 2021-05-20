@@ -45,7 +45,7 @@ func main() {
 			Name:       e.ChildText("h2.product-name"),
 			Price:      e.ChildText("#randPrice"),
 			Savings:    e.ChildText(".was-price > strong:nth-child(1) > span:nth-child(1)"),
-			Percentage: e.ChildText("table.discount-table tr:last-child td.discount-icon p.percentage"),
+			Percentage: e.ChildText("table#discount-table tr:last-child td.discount-icon p.percentage"),
 			RunDate:    runDate,
 		}
 
