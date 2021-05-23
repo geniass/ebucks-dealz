@@ -17,7 +17,7 @@ jobs:
 
       - name: Scrape
         working-directory: $GITHUB_WORKSPACE
-        run: go run ./cmd/main.go -overwrite -dir ./data
+        run: go run ./cmd/scraper/main.go -overwrite -dir ./data
 
       - name: Commit and push any data changes
         run: |-
