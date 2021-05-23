@@ -1,8 +1,8 @@
 name: Scrape Latest eBucks Deals
 
 on:
-  push:
   workflow_dispatch:
+  # TODO cron schedule
 
 jobs:
   scrape:
@@ -16,6 +16,7 @@ jobs:
         uses: actions/setup-go@v2.1.3
 
       - name: Scrape
+        working-directory: $GITHUB_WORKSPACE
         run: go run ./cmd/main.go -overwrite -dir ./data
 
       - name: Commit and push any data changes
