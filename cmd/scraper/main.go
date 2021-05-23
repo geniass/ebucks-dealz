@@ -17,6 +17,7 @@ var safeFilenameReplaceRegex = regexp.MustCompile(`[^a-zA-Z0-9-]+`)
 func main() {
 
 	dirNameArg := flag.String("dir", "./data", "directory in which to write scraped data files")
+	cacheDirArg := flag.String("cache", "", "cache directory")
 	overwriteArg := flag.Bool("overwrite", false, "when false, a new directory is created within the data dir named as the current date and time; otherwise the data dir is cleaned and replaced.")
 
 	flag.Parse()
@@ -38,7 +39,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s := scraper.NewScraper(func(p scraper.Product) {
+	s := scraper.NewScraper(*cacheDirArg, func(p scraper.Product) {
 		name := safeFilenameReplaceRegex.ReplaceAllString(p.Name, "-")
 
 		func() {
