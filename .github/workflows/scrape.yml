@@ -25,7 +25,7 @@ jobs:
           key: ebucks-colly-cache
 
       - name: Scrape
-        run: ./scraper -overwrite -dir ./data -cache ./cache
+        run: ./scraper -overwrite -dir ./data -cache ./cache -async
 
       - name: Commit and push any data changes
         run: |-
