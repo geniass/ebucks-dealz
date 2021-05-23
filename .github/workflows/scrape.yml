@@ -1,0 +1,27 @@
+name: Scrape Latest eBucks Deals
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v2.1.3
+
+      - name: Scrape
+        run: go run ./cmd/main.go -overwrite -dir ./data
+
+      - name: Commit and push any data changes
+        run: |-
+          git config user.name "Scraper"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A data
+          git commit -m "Latest data"
+          git push
