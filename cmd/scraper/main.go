@@ -28,6 +28,12 @@ func main() {
 		dirname = filepath.Join(dirname, runDate.Format("2006-01-02T15-04-05Z-0700"))
 	}
 
+	if *overwriteArg {
+		if err := os.RemoveAll(dirname); err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	if err := os.MkdirAll(dirname, os.ModeDir|0755); err != nil {
 		log.Fatal(err)
 	}
