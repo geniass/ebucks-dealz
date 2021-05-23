@@ -10,7 +10,7 @@ import (
 type ProductPageCallbackFunc func(p Product)
 
 // cacheDir can be empty to disable caching.
-func NewScraper(cacheDir string, callback ProductPageCallbackFunc) Scraper {
+func NewScraper(cacheDir string, async bool, callback ProductPageCallbackFunc) Scraper {
 	c := colly.NewCollector(
 		colly.AllowedDomains("www.ebucks.com"),
 		colly.URLFilters(
@@ -19,6 +19,7 @@ func NewScraper(cacheDir string, callback ProductPageCallbackFunc) Scraper {
 			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/productSelected\.do.*`),
 		),
 		colly.CacheDir(cacheDir),
+		colly.Async(async),
 	)
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
@@ -49,5 +50,6 @@ func (s Scraper) Start() error {
 	if err := s.colly.Visit("https://www.ebucks.com/web/shop/shopHome.do"); err != nil {
 		return err
 	}
+	s.colly.Wait()
 	return nil
 }

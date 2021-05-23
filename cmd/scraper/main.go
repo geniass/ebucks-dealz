@@ -19,6 +19,7 @@ func main() {
 	dirNameArg := flag.String("dir", "./data", "directory in which to write scraped data files")
 	cacheDirArg := flag.String("cache", "", "cache directory")
 	overwriteArg := flag.Bool("overwrite", false, "when false, a new directory is created within the data dir named as the current date and time; otherwise the data dir is cleaned and replaced.")
+	asyncArg := flag.Bool("async", false, "enable async scraping")
 
 	flag.Parse()
 
@@ -39,7 +40,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s := scraper.NewScraper(*cacheDirArg, func(p scraper.Product) {
+	s := scraper.NewScraper(*cacheDirArg, *asyncArg, func(p scraper.Product) {
 		name := safeFilenameReplaceRegex.ReplaceAllString(p.Name, "-")
 
 		func() {
