@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Samsung : Galaxy S21 Ultra 256GB
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1161786400&catId=714948688)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1129751050&catId=714947548)
 
 Price: R26999.00
 

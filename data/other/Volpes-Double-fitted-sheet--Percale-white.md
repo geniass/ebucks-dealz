@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Volpes Double fitted sheet -Percale white
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=258487552&catId=704987863)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1067624852&catId=704984344)
 
 Price: R299.00
 

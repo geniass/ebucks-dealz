@@ -1,0 +1,11 @@
+
+# Ebucks Dealz
+## BLACK +DECKER : 18V Platform 1Ah Battery Charger + 1.5Ah Pack
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1158891095&catId=704984897)
+
+Price: R799.00
+
+Savings: 340.0
+
+
+	

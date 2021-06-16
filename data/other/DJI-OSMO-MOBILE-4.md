@@ -1,11 +1,11 @@
 
 # Ebucks Dealz
 ## DJI-OSMO MOBILE 4
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1012939604&catId=714947548)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1081293096&catId=714994827)
 
-Price: R3549.00
+Price: R2499.00
 
-Savings: 
+Savings: 500.0
 
 
 	
