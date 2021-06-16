@@ -3,6 +3,7 @@ package scraper
 import (
 	"fmt"
 	"regexp"
+	"time"
 
 	"github.com/gocolly/colly"
 )
@@ -10,7 +11,12 @@ import (
 type ProductPageCallbackFunc func(p Product)
 
 // cacheDir can be empty to disable caching.
-func NewScraper(cacheDir string, async bool, callback ProductPageCallbackFunc) Scraper {
+func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) Scraper {
+	async := false
+	if threads > 1 {
+		async = true
+	}
+
 	c := colly.NewCollector(
 		colly.AllowedDomains("www.ebucks.com"),
 		colly.URLFilters(
@@ -21,6 +27,13 @@ func NewScraper(cacheDir string, async bool, callback ProductPageCallbackFunc) S
 		colly.CacheDir(cacheDir),
 		colly.Async(async),
 	)
+
+	c.Limit(&colly.LimitRule{
+		DomainGlob:  "*",
+		Parallelism: threads,
+		Delay:       1 * time.Second,
+		RandomDelay: 1 * time.Second,
+	})
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")

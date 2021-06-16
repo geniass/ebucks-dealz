@@ -19,7 +19,7 @@ func main() {
 	dirNameArg := flag.String("dir", "./data", "directory in which to write scraped data files")
 	cacheDirArg := flag.String("cache", "", "cache directory")
 	overwriteArg := flag.Bool("overwrite", false, "when false, a new directory is created within the data dir named as the current date and time; otherwise the data dir is cleaned and replaced.")
-	asyncArg := flag.Bool("async", false, "enable async scraping")
+	threadsArg := flag.Int("threads", 1, "number of async goroutines to use (1 to disable async)")
 
 	flag.Parse()
 
@@ -40,7 +40,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s := scraper.NewScraper(*cacheDirArg, *asyncArg, func(p scraper.Product) {
+	s := scraper.NewScraper(*cacheDirArg, *threadsArg, func(p scraper.Product) {
 		if p.Percentage == "" {
 			dirname := filepath.Join(dirname, "other")
 			if err := os.MkdirAll(dirname, os.ModeDir|0755); err != nil {
