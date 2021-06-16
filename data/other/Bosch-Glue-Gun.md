@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Bosch: Glue Gun
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=373349376&catId=717324798)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=342611398&catId=714893646)
 
 Price: R799.00
 

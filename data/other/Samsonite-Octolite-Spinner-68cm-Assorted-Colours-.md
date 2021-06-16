@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Samsonite Octolite Spinner 68cm (Assorted Colours)
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1074768898&catId=1158501552)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1074768898&catId=363334443)
 
 Price: R1699.00
 
