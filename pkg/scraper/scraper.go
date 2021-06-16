@@ -35,6 +35,13 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		RandomDelay: 1 * time.Second,
 	})
 
+	c.OnError(func(r *colly.Response, err error) {
+		fmt.Println("ERROR: Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
+		if err := c.Visit(r.Request.URL.String()); err != nil {
+			fmt.Println(err)
+		}
+	})
+
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		c.Visit(e.Request.AbsoluteURL(link))
@@ -48,6 +55,8 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 			Savings:    e.ChildText(".was-price > strong:nth-child(1) > span:nth-child(1)"),
 			Percentage: e.ChildText("table#discount-table tr:last-child td.discount-icon p.percentage"),
 		}
+
+		fmt.Println("Found product:", p.Name, p.URL)
 
 		callback(p)
 	})
