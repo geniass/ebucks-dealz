@@ -41,27 +41,32 @@ func main() {
 	}
 
 	s := scraper.NewScraper(*cacheDirArg, *asyncArg, func(p scraper.Product) {
-		if err := writeJSON(p, dirname); err != nil {
-			log.Fatal(err)
-		}
-		if err := writeMarkdown(p, dirname); err != nil {
-			log.Fatal(err)
-		}
+		if p.Percentage == "" {
+			dirname := filepath.Join(dirname, "other")
+			if err := os.MkdirAll(dirname, os.ModeDir|0755); err != nil {
+				log.Fatal(err)
+			}
 
-		if p.Percentage != "" {
-			func() {
-				percentDirname := filepath.Join(dirname, p.Percentage)
-				if err := os.MkdirAll(percentDirname, os.ModeDir|0755); err != nil {
-					log.Fatal(err)
-				}
+			if err := writeJSON(p, dirname); err != nil {
+				log.Fatal(err)
+			}
 
-				if err := writeJSON(p, percentDirname); err != nil {
-					log.Fatal(err)
-				}
-				if err := writeMarkdown(p, percentDirname); err != nil {
-					log.Fatal(err)
-				}
-			}()
+			if err := writeMarkdown(p, dirname); err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			dirname := filepath.Join(dirname, p.Percentage)
+			if err := os.MkdirAll(dirname, os.ModeDir|0755); err != nil {
+				log.Fatal(err)
+			}
+
+			if err := writeJSON(p, dirname); err != nil {
+				log.Fatal(err)
+			}
+
+			if err := writeMarkdown(p, dirname); err != nil {
+				log.Fatal(err)
+			}
 		}
 	})
 
