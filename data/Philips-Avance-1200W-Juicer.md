@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Philips Avance 1200W Juicer
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1068338737&catId=704984344)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=383359648&catId=704987863)
 
 Price: R2669.00
 

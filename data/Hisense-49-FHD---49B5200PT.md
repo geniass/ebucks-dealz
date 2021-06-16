@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Hisense 49" FHD - 49B5200PT
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=994926421&catId=370101825)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1066421964&catId=363628262)
 
 Price: R4999.00
 

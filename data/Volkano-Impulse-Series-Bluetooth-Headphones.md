@@ -1,11 +1,11 @@
 
 # Ebucks Dealz
 ## Volkano: Impulse Series Bluetooth Headphones
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1149052743&catId=704985963)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=690390624&catId=1157555360)
 
-Price: R779.00
+Price: R299.00
 
-Savings: 120.0
+Savings: 100.0
 
 
 	

@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## BOSCH KETTLE WHITE TWK3A011
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1169659122&catId=370101825)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1135732244&catId=1158501552)
 
 Price: R699.00
 
