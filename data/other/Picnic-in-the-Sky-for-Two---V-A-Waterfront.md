@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Picnic in the Sky for Two - V&A Waterfront
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=285076610&catId=227677169)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=996866084&catId=704987863)
 
 Price: R1999.00
 
