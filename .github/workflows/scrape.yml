@@ -3,7 +3,7 @@ name: Scrape Latest eBucks Deals
 on:
   workflow_dispatch:
   schedule:
-    - cron: '5 4 * * *'
+    - cron: '5 0/2 * * *'
 
 jobs:
   scrape:
