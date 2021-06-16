@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Ryobi: 8Amp Electronic Battery Charger
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1161817822&catId=714962196)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=315066536&catId=370101825)
 
 Price: R699.00
 

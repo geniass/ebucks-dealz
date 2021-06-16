@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Clinic Gear Washable Face Mask - Youths - Assortment
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1065610303&catId=908607666)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=849445180&catId=704983786)
 
 Price: R29.00
 

@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Defy: 254LT White Chest Freezer
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=960055192&catId=1130195724)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1059230540&catId=363628279)
 
 Price: R4799.00
 

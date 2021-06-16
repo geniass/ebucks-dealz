@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Ryobi: Maglithion Mini Fan - 12v
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1129493554&catId=714962196)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=316342454&catId=370101825)
 
 Price: R179.00
 
