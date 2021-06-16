@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Finish Rinse Aid Regular - 400ml
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1085593889&catId=908607666)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=583687489&catId=908586136)
 
 Price: R85.00
 
