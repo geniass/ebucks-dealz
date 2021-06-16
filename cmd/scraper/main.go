@@ -41,20 +41,12 @@ func main() {
 	}
 
 	s := scraper.NewScraper(*cacheDirArg, *asyncArg, func(p scraper.Product) {
-		name := safeFilenameReplaceRegex.ReplaceAllString(p.Name, "-")
-
-		func() {
-			f, err := os.Create(filepath.Join(dirname, name+".json"))
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer f.Close()
-
-			encoder := json.NewEncoder(f)
-			if err := encoder.Encode(p); err != nil {
-				log.Fatal(err)
-			}
-		}()
+		if err := writeJSON(p, dirname); err != nil {
+			log.Fatal(err)
+		}
+		if err := writeMarkdown(p, dirname); err != nil {
+			log.Fatal(err)
+		}
 
 		if p.Percentage != "" {
 			func() {
@@ -63,14 +55,10 @@ func main() {
 					log.Fatal(err)
 				}
 
-				f, err := os.Create(filepath.Join(percentDirname, name+".json"))
-				if err != nil {
+				if err := writeJSON(p, percentDirname); err != nil {
 					log.Fatal(err)
 				}
-				defer f.Close()
-
-				encoder := json.NewEncoder(f)
-				if err := encoder.Encode(p); err != nil {
+				if err := writeMarkdown(p, percentDirname); err != nil {
 					log.Fatal(err)
 				}
 			}()
@@ -80,4 +68,36 @@ func main() {
 	if err := s.Start(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func writeJSON(p scraper.Product, path string) error {
+	name := safeFilenameReplaceRegex.ReplaceAllString(p.Name, "-")
+	f, err := os.Create(filepath.Join(path, name+".json"))
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	encoder := json.NewEncoder(f)
+	encoder.SetIndent("", "  ")
+	if err := encoder.Encode(p); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func writeMarkdown(p scraper.Product, path string) error {
+	name := safeFilenameReplaceRegex.ReplaceAllString(p.Name, "-")
+	f, err := os.Create(filepath.Join(path, name+".md"))
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	if err := markdownTemplate.Execute(f, p); err != nil {
+		return err
+	}
+
+	return nil
 }
