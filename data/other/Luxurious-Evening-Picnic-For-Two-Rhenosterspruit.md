@@ -1,9 +1,9 @@
 
 # Ebucks Dealz
 ## Luxurious Evening Picnic For Two | Rhenosterspruit
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=342602264&catId=714893646)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1186047537&catId=1133291653)
 
-Price: R1789.00
+Price: R3500.00
 
 Savings: 
 

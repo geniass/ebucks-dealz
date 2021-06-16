@@ -1,11 +1,11 @@
 
 # Ebucks Dealz
 ## Volpes Double Duvet cover set , Percale white
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1066979406&catId=704984344)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=223573647&catId=322194367)
 
-Price: R229.00
+Price: R479.00
 
-Savings: 
+Savings: 220.0
 
 
 	
