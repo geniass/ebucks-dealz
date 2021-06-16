@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Ryobi: Laser Liner
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1069551881&catId=1126033699)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=998797458&catId=704984897)
 
 Price: R669.00
 

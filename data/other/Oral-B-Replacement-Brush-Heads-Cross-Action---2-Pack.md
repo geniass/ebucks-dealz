@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Oral-B Replacement Brush Heads Cross Action - 2 Pack
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=539023184&catId=908594260)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=642149042&catId=714948688)
 
 Price: R209.00
 

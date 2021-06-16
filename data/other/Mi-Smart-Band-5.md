@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Mi Smart Band 5
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=995576769&catId=842826930)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=259207129&catId=935859854)
 
 Price: R799.00
 
