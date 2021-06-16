@@ -2,7 +2,9 @@ package scraper
 
 import (
 	"fmt"
+	"math"
 	"regexp"
+	"sync"
 	"time"
 
 	"github.com/gocolly/colly"
@@ -26,7 +28,14 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		),
 		colly.CacheDir(cacheDir),
 		colly.Async(async),
+		colly.UserAgent("Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0"),
 	)
+
+	s := Scraper{
+		colly:       c,
+		mutex:       &sync.Mutex{},
+		urlBackoffs: make(map[string]int),
+	}
 
 	c.Limit(&colly.LimitRule{
 		DomainGlob:  "*",
@@ -36,8 +45,16 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 	})
 
 	c.OnError(func(r *colly.Response, err error) {
-		fmt.Println("ERROR: Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
-		if err := c.Visit(r.Request.URL.String()); err != nil {
+		// exponential backoff
+		s.mutex.Lock()
+		s.urlBackoffs[r.Request.URL.String()]++
+		numRetries := s.urlBackoffs[r.Request.URL.String()]
+		s.mutex.Unlock()
+
+		duration := time.Duration(math.Pow(2, float64(numRetries))) * time.Second
+		fmt.Println("ERROR: Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err, "\nRetrying after %v", duration)
+		time.Sleep(duration)
+		if err := r.Request.Retry(); err != nil {
 			fmt.Println(err)
 		}
 	})
@@ -65,7 +82,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		fmt.Println("Visiting", r.URL.String())
 	})
 
-	return Scraper{colly: c}
+	return s
 }
 
 func (s Scraper) Start() error {

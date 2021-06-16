@@ -1,11 +1,16 @@
 package scraper
 
 import (
+	"sync"
+
 	"github.com/gocolly/colly"
 )
 
 type Scraper struct {
 	colly *colly.Collector
+
+	mutex       *sync.Mutex
+	urlBackoffs map[string]int
 }
 
 type Product struct {
