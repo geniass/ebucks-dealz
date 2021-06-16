@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## RING - Chime PRO
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1161145102&catId=704982758)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1162614077&catId=1170874557)
 
 Price: R983.00
 
