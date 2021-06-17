@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Oral-B: Rechargeable Electric Toothbrush Teen - White
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=539025436&catId=1158501102)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1064904964&catId=1158501102)
 
 Price: R729.00
 
