@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Hisense 43" FHD - 43A5200F
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=985261878&catId=1158501813)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1066423208&catId=1158501813)
 
 Price: R3899.00
 
