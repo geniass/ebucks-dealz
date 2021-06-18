@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Cal-C-Vita Plus 30 Effervescent Tabs
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1133338551&catId=1133291653)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1133321668&catId=1133291653)
 
 Price: R219.00
 
