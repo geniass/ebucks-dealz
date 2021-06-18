@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## JB1055 JO LOAF TIN LARGE
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=570824885&catId=1158500560)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1135586814&catId=1158500560)
 
 Price: R229.00
 
