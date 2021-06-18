@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Sidea Hex Dumbbell Pro Bench Pack + Free Delivery
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1173544791&catId=1173528667)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1173560281&catId=375509364)
 
 Price: R13659.00
 
