@@ -3,9 +3,9 @@
 ## Turner Morris 12Kva Generator 220V Silent
 [Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=873435662&catId=870841698)
 
-Price: R45799.00
+Price: R58799.00
 
-Savings: 1200.0
+Savings: 3200.0
 
 
 	

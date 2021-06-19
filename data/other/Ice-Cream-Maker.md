@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Ice Cream Maker
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1098226817&catId=375509364)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=340696244&catId=375509364)
 
 Price: R179.00
 
