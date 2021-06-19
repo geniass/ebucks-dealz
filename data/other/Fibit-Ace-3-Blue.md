@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Fibit Ace 3 Blue
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1155127230&catId=842821695)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=671317762&catId=842821695)
 
 Price: R1649.00
 
