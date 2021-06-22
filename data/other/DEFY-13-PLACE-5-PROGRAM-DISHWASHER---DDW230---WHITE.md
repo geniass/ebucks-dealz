@@ -3,9 +3,9 @@
 ## DEFY 13 PLACE 5 PROGRAM DISHWASHER - DDW230 - WHITE
 [Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1162521047&catId=704983786)
 
-Price: R4599.00
+Price: R4799.00
 
-Savings: 200.0
+Savings: 400.0
 
 
 	
