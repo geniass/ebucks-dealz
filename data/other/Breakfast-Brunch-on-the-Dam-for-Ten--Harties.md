@@ -1,9 +1,9 @@
 
 # Ebucks Dealz
-## Durban: Segway Moses Mabhida Stadium Tour for 10
+## Breakfast Brunch on the Dam for Ten- Harties
 [Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=515231724&catId=322194367)
 
-Price: R3399.00
+Price: R4599.00
 
 Savings: 
 
