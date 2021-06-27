@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Jimmy F6 Pro Nanoi Ultrasonic Hair Dryer - Red
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1069062375&catId=1158501552)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1069062375&catId=1186086453)
 
 Price: R2799.00
 
