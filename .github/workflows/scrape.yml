@@ -17,7 +17,9 @@ jobs:
         uses: actions/setup-go@v2.1.3
 
       - name: Build
-        run: go build ./cmd/scraper
+        run: |-
+          go build ./cmd/scraper
+          go build ./cmd/generate-web
 
       - name: Cache scraper cache files
         uses: actions/cache@v2
@@ -34,4 +36,15 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add -A data
           git commit -m "Latest data"
+          git push
+
+      - name: Render static web files
+        run: ./generate-web -data-dir ./data -output-dir ./docs
+
+      - name: Commit and push any web file changes
+        run: |-
+          git config user.name "Scraper"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A docs
+          git commit -m "Latest web"
           git push
