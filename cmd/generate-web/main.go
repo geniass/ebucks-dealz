@@ -17,6 +17,10 @@ func main() {
 
 	flag.Parse()
 
+	if err := os.MkdirAll(*ouputDirArg, os.ModeDir|0775); err != nil {
+		log.Fatal(err)
+	}
+
 	// Home page
 	err := renderToFile(*ouputDirArg, "index.html", web.RenderHome)
 	if err != nil {
