@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## JB3580 JO CAKE SERVER
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1136087454&catId=714962196)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1158489342&catId=714962196)
 
 Price: R169.00
 
