@@ -11,7 +11,12 @@ import (
 //go:embed templates
 var templatesFs embed.FS
 
+type BaseContext struct {
+	PathPrefix string
+}
+
 type DealzContext struct {
+	BaseContext
 	Title    string
 	Products []scraper.Product
 }
@@ -33,7 +38,7 @@ func RenderDealz(w io.Writer, c DealzContext) error {
 	return nil
 }
 
-func RenderHome(w io.Writer) error {
+func RenderHome(w io.Writer, c BaseContext) error {
 	t, err := template.ParseFS(templatesFs, "templates/index.html.tpl")
 	if err != nil {
 		return err
@@ -43,7 +48,7 @@ func RenderHome(w io.Writer) error {
 		return err
 	}
 
-	err = t.Execute(w, nil)
+	err = t.Execute(w, c)
 	if err != nil {
 		return err
 	}

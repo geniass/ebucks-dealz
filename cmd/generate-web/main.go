@@ -14,6 +14,7 @@ import (
 func main() {
 	dataDirNameArg := flag.String("data-dir", "./data", "directory that contains scraped data files")
 	ouputDirArg := flag.String("output-dir", "docs", "data to write rendered HTML content to")
+	pagePathPrefixArg := flag.String("path-prefix", "", "prefix page link URLs (in case pages are hosted at a subpath); should start with '/'")
 
 	flag.Parse()
 
@@ -22,7 +23,9 @@ func main() {
 	}
 
 	// Home page
-	err := renderToFile(*ouputDirArg, "index.html", web.RenderHome)
+	err := renderToFile(*ouputDirArg, "index.html", func(w io.Writer) error {
+		return web.RenderHome(w, web.BaseContext{PathPrefix: *pagePathPrefixArg})
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +36,12 @@ func main() {
 		log.Fatal(err)
 	}
 	err = renderToFile(*ouputDirArg, "discount.html", func(w io.Writer) error {
-		return web.RenderDealz(w, web.DealzContext{Title: "Discounted (40%)", Products: ps})
+		c := web.DealzContext{
+			BaseContext: web.BaseContext{PathPrefix: *pagePathPrefixArg},
+			Title:       "Discounted (40%)",
+			Products:    ps,
+		}
+		return web.RenderDealz(w, c)
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -45,7 +53,12 @@ func main() {
 		log.Fatal(err)
 	}
 	err = renderToFile(*ouputDirArg, "other.html", func(w io.Writer) error {
-		return web.RenderDealz(w, web.DealzContext{Title: "Other Products", Products: ps})
+		c := web.DealzContext{
+			BaseContext: web.BaseContext{PathPrefix: *pagePathPrefixArg},
+			Title:       "Other Products",
+			Products:    ps,
+		}
+		return web.RenderDealz(w, c)
 	})
 	if err != nil {
 		log.Fatal(err)

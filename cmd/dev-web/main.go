@@ -10,7 +10,7 @@ import (
 
 func main() {
 	http.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
-		if err := web.RenderHome(rw); err != nil {
+		if err := web.RenderHome(rw, web.BaseContext{PathPrefix: "/"}); err != nil {
 			log.Println(err)
 			rw.WriteHeader(http.StatusInternalServerError)
 			return
