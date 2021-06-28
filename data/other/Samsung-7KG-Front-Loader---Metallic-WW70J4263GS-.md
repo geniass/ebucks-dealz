@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Samsung 7KG Front Loader - Metallic (WW70J4263GS)
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=955292248&catId=704981826)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1059206551&catId=704981826)
 
 Price: R6799.00
 
