@@ -41,7 +41,7 @@ jobs:
           git push
 
       - name: Render static web files
-        run: ./generate-web -data-dir ./data -output-dir ./docs
+        run: ./generate-web -data-dir ./data -output-dir ./docs -path-prefix /ebucks-dealz
 
       - name: Commit and push any web file changes
         run: |-
