@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Vanish Power O2 Carpet & Mutli Fabric Stain Remover - 500ml
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=380859347&catId=1158500262)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=380877316&catId=1158500262)
 
 Price: R79.00
 
