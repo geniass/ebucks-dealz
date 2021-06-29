@@ -3,9 +3,9 @@
 ## Jimmy JV65 Handheld Cordless Stick Vacuum Cleaner - Red
 [Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1069091824&catId=998409624)
 
-Price: R4449.00
+Price: R4199.00
 
-Savings: 550.0
+Savings: 700.0
 
 
 	
