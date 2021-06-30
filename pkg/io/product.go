@@ -12,11 +12,12 @@ import (
 func LoadFromDir(dir string) ([]scraper.Product, error) {
 	var ps []scraper.Product
 	err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
-		if d.IsDir() {
-			return nil
-		}
 		if err != nil {
 			return err
+		}
+
+		if d.IsDir() {
+			return nil
 		}
 
 		f, err := os.Open(path)
