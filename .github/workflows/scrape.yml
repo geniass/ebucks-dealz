@@ -35,6 +35,7 @@ jobs:
 
       - name: Commit and push any data changes
         run: |-
+          [ -z "$(git status --porcelain=v1 2>/dev/null)" ] && echo "No Changes" && exit 0
           git config user.name "Scraper"
           git config user.email "actions@users.noreply.github.com"
           git add -A data
@@ -46,6 +47,7 @@ jobs:
 
       - name: Commit and push any web file changes
         run: |-
+          [ -z "$(git status --porcelain=v1 2>/dev/null)" ] && echo "No Changes" && exit 0
           git config user.name "Scraper"
           git config user.email "actions@users.noreply.github.com"
           git add -A docs
