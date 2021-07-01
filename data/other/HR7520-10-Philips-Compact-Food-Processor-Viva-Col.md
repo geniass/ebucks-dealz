@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## HR7520/10 Philips Compact Food Processor Viva Col
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1165772147&catId=704987863)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1165770265&catId=704987863)
 
 Price: R1899.00
 
