@@ -1,11 +1,11 @@
 
 # Ebucks Dealz
 ## SMF02PGEU SMEG STAND MIXER PASTEL GREEN
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1169626169&catId=704987863)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1169626169&catId=1196428103)
 
-Price: R8499.00
+Price: R8299.00
 
-Savings: 1501.0
+Savings: 1701.0
 
 
 	

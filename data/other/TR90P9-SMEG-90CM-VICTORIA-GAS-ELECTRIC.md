@@ -1,11 +1,11 @@
 
 # Ebucks Dealz
 ## TR90P9 SMEG 90CM VICTORIA GAS-ELECTRIC
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1173110176&catId=704989856)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1173110176&catId=1196429345)
 
-Price: R44999.00
+Price: R43999.00
 
-Savings: 2501.0
+Savings: 3501.0
 
 
 	

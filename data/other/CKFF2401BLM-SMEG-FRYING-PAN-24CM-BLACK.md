@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## CKFF2401BLM SMEG FRYING PAN 24CM BLACK
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1170681500&catId=704983235)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1170681500&catId=1196428103)
 
 Price: R1800.00
 
