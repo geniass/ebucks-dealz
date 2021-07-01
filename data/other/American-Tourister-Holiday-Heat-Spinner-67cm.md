@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## American Tourister: Holiday Heat Spinner 67cm
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1061377349&catId=365267763)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=676097239&catId=714997442)
 
 Price: R1199.00
 
