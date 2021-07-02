@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## 9639-016 WAHL STYLE PRO 18 PIECE
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1191157930&catId=1186081080)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1191157930&catId=375509364)
 
 Price: R429.00
 
