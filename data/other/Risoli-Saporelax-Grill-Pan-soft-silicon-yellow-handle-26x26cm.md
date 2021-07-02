@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Risoli Saporelax Grill Pan soft silicon yellow handle 26x26cm
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1162576111&catId=1157659933)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1162572562&catId=1157659933)
 
 Price: R849.00
 
