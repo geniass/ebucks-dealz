@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## DW45QXSA SMEG 45CM DISHWASHER
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1183592019&catId=704983786)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1183592019&catId=1196429345)
 
 Price: R12399.00
 
