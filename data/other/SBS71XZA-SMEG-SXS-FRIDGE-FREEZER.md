@@ -3,9 +3,9 @@
 ## SBS71XZA SMEG SXS FRIDGE/FREEZER
 [Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1183688554&catId=1196429345)
 
-Price: R30999.00
+Price: R30499.00
 
-Savings: 1201.0
+Savings: 1701.0
 
 
 	
