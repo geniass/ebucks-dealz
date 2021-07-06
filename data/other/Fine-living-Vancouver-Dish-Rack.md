@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Fine living: Vancouver Dish Rack
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1164509240&catId=714962196)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=293478594&catId=714962196)
 
 Price: R149.00
 
