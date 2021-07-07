@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## RHOMBK RUSSELL HOBBS RED OMBRE KETTLE
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1155336741&catId=704985963)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1155336741&catId=1157551679)
 
 Price: R779.00
 

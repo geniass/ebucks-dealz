@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Mortein Naturgard Complete- Citronella 236ml
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1170312158&catId=994900921)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=602897669&catId=908607666)
 
 Price: R125.00
 
