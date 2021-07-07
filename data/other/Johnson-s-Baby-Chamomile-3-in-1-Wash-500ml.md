@@ -1,11 +1,11 @@
 
 # Ebucks Dealz
-## Johnson's Baby Cotton Touch Face & Body Lotion 500ml
+## Johnson's Baby Chamomile 3-in-1 Wash 500ml
 [Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=965972187&catId=1186088243)
 
-Price: R69.00
+Price: R55.00
 
-Savings: 
+Savings: 14.0
 
 
 	
