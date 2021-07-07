@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Pure Pleasure: King Fully Fitted Sherpa Fleece Electric Blanket - ZEPP183188SH
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=319801220&catId=1157551316)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=319801220&catId=704982758)
 
 Price: R749.00
 
