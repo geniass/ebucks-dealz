@@ -3,9 +3,9 @@
 ## Wahl Style Pro 18pc 9639-016
 [Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1191157930&catId=1186081080)
 
-Price: R159.00
+Price: R429.00
 
-Savings: 31.0
+Savings: 71.0
 
 
 	
