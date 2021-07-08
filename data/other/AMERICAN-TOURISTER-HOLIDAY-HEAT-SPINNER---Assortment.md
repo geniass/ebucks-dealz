@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## AMERICAN TOURISTER HOLIDAY HEAT SPINNER - Assortment
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=995576769&catId=842826930)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1059476525&catId=365267763)
 
 Price: R1599.00
 
