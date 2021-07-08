@@ -1,11 +1,11 @@
 
 # Ebucks Dealz
-## Ryobi: Laser Distance Meter - 20M
+## Ryobi: Laser Distance Measure - 0.1-50M
 [Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=335507759&catId=370101825)
 
-Price: R1019.00
+Price: R1999.00
 
-Savings: 130.0
+Savings: 250.0
 
 
 	
