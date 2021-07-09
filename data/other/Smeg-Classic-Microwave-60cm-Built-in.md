@@ -5,7 +5,7 @@
 
 Price: R12499.00
 
-Savings: 800.0
+Savings: 
 
 
 	
