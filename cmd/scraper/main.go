@@ -58,7 +58,8 @@ func main() {
 				log.Fatal(err)
 			}
 		} else {
-			dir := filepath.Join(dirname, p.Percentage)
+			// HACK!!! fnb broke the website so now it just shows '%' instead of '40%'
+			dir := filepath.Join(dirname, "40%")
 			if err := os.MkdirAll(dir, os.ModeDir|0755); err != nil {
 				log.Fatal(err)
 			}
