@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Salter: Contour Electronic Timer - Silver
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1161864820&catId=714962196)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=676068303&catId=1158500262)
 
 Price: R259.00
 
