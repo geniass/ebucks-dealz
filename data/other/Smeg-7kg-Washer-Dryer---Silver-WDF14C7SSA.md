@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Smeg: 7kg Washer Dryer - Silver WDF14C7SSA
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1183620027&catId=1196429345)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1183623972&catId=1196429345)
 
 Price: R21999.00
 
