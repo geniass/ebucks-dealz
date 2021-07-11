@@ -18,7 +18,9 @@ type Scraper struct {
 type Product struct {
 	URL        string
 	Name       string
-	Price      string
-	Savings    string
-	Percentage string
+	Price      float64
+	Savings    float64
+	Percentage float64
+}
+
 }

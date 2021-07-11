@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -41,7 +42,7 @@ func main() {
 	}
 
 	s := scraper.NewScraper(*cacheDirArg, *threadsArg, func(p scraper.Product) {
-		if p.Percentage == "" {
+		if p.Percentage == 0 {
 			dir := filepath.Join(dirname, "other")
 			if err := os.MkdirAll(dir, os.ModeDir|0755); err != nil {
 				log.Fatal(err)
@@ -58,8 +59,7 @@ func main() {
 				log.Fatal(err)
 			}
 		} else {
-			// HACK!!! fnb broke the website so now it just shows '%' instead of '40%'
-			dir := filepath.Join(dirname, "40%")
+			dir := filepath.Join(dirname, fmt.Sprintf("%.0f%%", p.Percentage))
 			if err := os.MkdirAll(dir, os.ModeDir|0755); err != nil {
 				log.Fatal(err)
 			}

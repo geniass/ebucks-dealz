@@ -8,12 +8,12 @@ var markdownTemplate = template.Must(template.New("markdownTemplate").Parse(
 ## {{ .Name }}
 [Product Page]({{ .URL }})
 
-Price: {{ .Price }}
+Price: {{printf "R %.2f" .Price }}
 
-Savings: {{ .Savings }}
+Savings: {{printf "R %.2f" .Savings }}
 
-{{ if ne .Percentage "" -}}
-Percentage off: {{ .Percentage }}
+{{ if ne .Percentage 0. -}}
+Percentage off: {{ .Percentage }}%
 {{- end }}
 	`,
 ))
