@@ -23,4 +23,28 @@ type Product struct {
 	Percentage float64
 }
 
+type ebucksProductDetail struct {
+	ProductDetail struct {
+		ID       int              `json:"id"`
+		Discount []ebucksDiscount `json:"discount"`
+	} `json:"productDetail"`
+}
+
+type ebucksDiscount struct {
+	Level         int `json:"discountLevel"`
+	Percent       int `json:"discountPercent"`
+	EbucksPrice   int `json:"discountPrice"`  // The price is given in ebucks, not rands
+	EbucksSavings int `json:"discountSaving"` // The price is given in ebucks, not rands
+}
+
+func (d ebucksDiscount) RandPrice() float64 {
+	return ebucksToRands(d.EbucksPrice)
+}
+
+func (d ebucksDiscount) RandSavings() float64 {
+	return ebucksToRands(d.EbucksSavings)
+}
+
+func ebucksToRands(ebucks int) float64 {
+	return float64(ebucks) / 10
 }

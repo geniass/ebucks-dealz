@@ -1,6 +1,7 @@
 package scraper
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -9,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -25,6 +27,12 @@ type ProductPageCallbackFunc func(p Product)
 
 var ErrRedirectToErrorPage = errors.New("redirected to error page")
 
+const ctxScrapedDataKey string = "scraped"
+
+var urlProdIdAndCatIdRegex = regexp.MustCompile(`productSelected\.do\?prodId=(\d+)&catId=(\d+)`)
+var randsRegex = regexp.MustCompile(`R([\d\s]+(\.\d+)?)`)
+var whitespaceRegex = regexp.MustCompile(`\s`)
+
 // cacheDir can be empty to disable caching.
 func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) Scraper {
 
@@ -34,7 +42,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 			regexp.MustCompile(`https://www\.ebucks\.com/web/eBucks$`),
 			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/shopHome\.do`),
 			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/categorySelected\.do.*`),
-			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/productSelected\.do.*`),
+			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/productSelected(Json)?\.do.*`),
 		),
 		colly.UserAgent("Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0"),
 	}
@@ -131,22 +139,89 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 			log.Fatalf("prodId or catId mismatch! pid=%s (%s) cid=%s (%s)\n", pid, cid, urlProdId, urlCatId)
 		}
 
-		p := Product{
-			URL:        e.Request.URL.String(),
-			Name:       e.ChildText("h2.product-name"),
-			Price:      e.ChildText("#randPrice"),
-			Savings:    e.ChildText(".was-price > strong:nth-child(1) > span:nth-child(1)"),
-			Percentage: e.ChildText("table#discount-table tr:last-child td.discount-icon p.percentage"),
+		price := float64(-1)
+		{
+			priceString := e.ChildText("#randPrice")
+			if priceString != "" {
+				f, err := parseRands(priceString)
+				if err != nil {
+					fmt.Printf("Error parsing price (%q): %s\n", priceString, err)
+				} else {
+					price = f
+				}
+			}
 		}
 
-		fmt.Println("Found product:", p.Name, p.URL)
+		savings := float64(0)
+		{
+			savingsString := e.ChildText(".was-price .randValue")
+			if savingsString != "" {
+				f, err := parseRands(savingsString)
+				if err != nil {
+					fmt.Printf("Error parsing savings (%q): %s\n", savingsString, err)
+				} else {
+					savings = f
+				}
+			}
+		}
 
-		callback(p)
+		p := Product{
+			URL:     e.Request.URL.String(),
+			Name:    e.ChildText("h2.product-name"),
+			Price:   price,
+			Savings: savings,
+		}
+
+		// the ebucks site now splits the data into 2 sections
+		// the static html contains the product name and description etc.
+		// it also sometimes contains an empty HTML table for the discount prices
+		// in this case there is also a JSON page available containing the actual discount prices
+		hasDiscount := false
+		e.ForEach(`table#discount-table`, func(i int, h *colly.HTMLElement) {
+			hasDiscount = true
+		})
+
+		fmt.Printf("Found product: Name=%q Discounted=%v URL=%q\n", p.Name, hasDiscount, p.URL)
+
+		if hasDiscount {
+			// queue fetching the JSON page for this product (for prices etc.) if the product is discounted
+			fmt.Println("Fetching discounts...")
+			link := e.Request.URL.String()
+			if urlProdIdAndCatIdRegex.MatchString(link) {
+				replaced := urlProdIdAndCatIdRegex.ReplaceAllString(link, "productSelectedJson.do?prodId=$1&catId=$2")
+				e.Request.Ctx.Put(ctxScrapedDataKey, p)
+				e.Request.Visit(replaced)
+			}
+		} else {
+			// no more data to fetch, we are done
+			callback(p)
+		}
 	})
 
 	s.colly.OnRequest(func(r *colly.Request) {
 		fmt.Println("Visiting", r.URL.String())
 		r.Headers.Add("Cookie", "js=1637881630272")
+	})
+
+	s.colly.OnResponse(func(r *colly.Response) {
+		// try get the partial product info that was scraped and continue parsing the JSON response
+		c, ok := r.Ctx.GetAny(ctxScrapedDataKey).(Product)
+		if !ok {
+			return
+		}
+
+		pd := ebucksProductDetail{}
+		if err := json.Unmarshal(r.Body, &pd); err != nil {
+			fmt.Println("ERROR: fetching json product detail:", err)
+			r.Request.Abort()
+		}
+
+		discount := pd.ProductDetail.Discount[len(pd.ProductDetail.Discount)-1]
+		c.Percentage = float64(discount.Percent)
+		c.Price = discount.RandPrice()
+		c.Savings = discount.RandSavings()
+
+		callback(c)
 	})
 
 	return s
@@ -189,4 +264,14 @@ func cleanCategorySelectedUrl(url string) string {
 		return url
 	}
 	return matches[1] + "?" + matches[2]
+}
+
+func parseRands(s string) (float64, error) {
+	matches := randsRegex.FindStringSubmatch(s)
+	if len(matches) < 2 {
+		return 0, fmt.Errorf("does not match the rands parsing regex")
+	}
+	s = matches[1]
+	s = whitespaceRegex.ReplaceAllLiteralString(s, "")
+	return strconv.ParseFloat(s, 64)
 }
