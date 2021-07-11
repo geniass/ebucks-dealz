@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## VolkanoX Asista Series: N01 - Black
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=623436229&catId=714972256)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1196479014&catId=714972256)
 
 Price: R299.00
 
