@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## ALVA CYLINDER TOP HEATER
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1142118250&catId=704982758)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1142095049&catId=704982758)
 
 Price: R309.00
 
