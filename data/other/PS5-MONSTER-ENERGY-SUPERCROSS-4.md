@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## PS5 MONSTER ENERGY SUPERCROSS 4
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1149769848&catId=724351586)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1131162030&catId=724351586)
 
 Price: R699.00
 
