@@ -1,9 +1,9 @@
 
 # Ebucks Dealz
-## Volkano Sprint 2.0 True wireless earbuds-Black
+## Volkano Stretch series retractable mono earpiece - Bluetooth Black
 [Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1196478082&catId=714972256)
 
-Price: R599.00
+Price: R399.00
 
 Savings: 
 
