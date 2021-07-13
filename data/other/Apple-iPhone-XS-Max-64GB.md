@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Apple: iPhone XS Max 64GB
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=465634326&catId=1158505265)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1074841393&catId=1158501552)
 
 Price: R20799.00
 
