@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## LTM DIY DC Solar PV kit
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=994939420&catId=994900921)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1170344278&catId=994900921)
 
 Price: R7789.00
 
