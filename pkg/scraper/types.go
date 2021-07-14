@@ -3,7 +3,7 @@ package scraper
 import (
 	"sync"
 
-	"github.com/gocolly/colly"
+	"github.com/gocolly/colly/v2"
 )
 
 type Scraper struct {

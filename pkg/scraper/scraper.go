@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gocolly/colly"
+	"github.com/gocolly/colly/v2"
 )
 
 type ProductPageCallbackFunc func(p Product)
@@ -19,24 +19,25 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		async = true
 	}
 
-	c := colly.NewCollector(
+	options := []colly.CollectorOption{
 		colly.AllowedDomains("www.ebucks.com"),
 		colly.URLFilters(
 			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/shopHome\.do`),
 			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/categorySelected\.do.*`),
 			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/productSelected\.do.*`),
 		),
-		colly.CacheDir(cacheDir),
-		colly.Async(async),
 		colly.UserAgent("Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0"),
-	)
-
-	s := Scraper{
-		colly:       c,
-		mutex:       &sync.Mutex{},
-		urlBackoffs: make(map[string]int),
 	}
 
+	if async {
+		options = append(options, colly.Async())
+	}
+
+	if cacheDir != "" {
+		options = append(options, colly.CacheDir(cacheDir))
+	}
+
+	c := colly.NewCollector(options...)
 	c.Limit(&colly.LimitRule{
 		DomainGlob:  "*",
 		Parallelism: threads,
