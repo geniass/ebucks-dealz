@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Ryobi: 18M Ultrasonic Multi Detector & Measure
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1169666389&catId=370101825)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=378977893&catId=370101825)
 
 Price: R569.00
 
