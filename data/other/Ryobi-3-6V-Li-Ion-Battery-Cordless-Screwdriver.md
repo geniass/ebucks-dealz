@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Ryobi: 3,6V Li-Ion Battery Cordless Screwdriver
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=335369750&catId=336131644)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=335288050&catId=336131644)
 
 Price: R329.00
 
