@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## Risoli Explora Brochette grill 47x26cm
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1162582671&catId=1157659933)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1162587803&catId=704983235)
 
 Price: R1699.00
 
