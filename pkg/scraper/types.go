@@ -13,11 +13,17 @@ type Scraper struct {
 
 	mutex       *sync.Mutex
 	urlBackoffs map[string]int
+	links       map[string]int
+	scraped     map[string]int
+
+	urlChan chan string
 }
 
 type Product struct {
 	URL        string
 	Name       string
+	ProdID     string
+	CatID      string
 	Price      float64
 	Savings    float64
 	Percentage float64

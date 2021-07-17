@@ -3,15 +3,20 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
+	"sync"
 	"time"
 
 	"github.com/geniass/ebucks-dealz/pkg/scraper"
 )
+
+// NOTES
+// * things that randomly disappear: instead of deleting everything upfront, fetch new products, then check (set(allProducts) - set(newProducts)) to see if they still exist. Delete if not.
+//   this would also help with randomly changing urls which can then be ignored.
+// * compare url -> name map between single-thread and multi-thread
 
 var safeFilenameReplaceRegex = regexp.MustCompile(`[^a-zA-Z0-9-]+`)
 
@@ -41,39 +46,21 @@ func main() {
 		log.Fatal(err)
 	}
 
+	fileLock := &sync.Mutex{}
+
 	s := scraper.NewScraper(*cacheDirArg, *threadsArg, func(p scraper.Product) {
-		if p.Percentage == 0 {
-			dir := filepath.Join(dirname, "other")
-			if err := os.MkdirAll(dir, os.ModeDir|0755); err != nil {
-				log.Fatal(err)
-			}
-			if err := writeMarkdown(p, dir); err != nil {
-				log.Fatal(err)
-			}
 
-			jsonDir := filepath.Join(dir, "raw")
-			if err := os.MkdirAll(jsonDir, os.ModeDir|0755); err != nil {
-				log.Fatal(err)
-			}
-			if err := writeJSON(p, jsonDir); err != nil {
-				log.Fatal(err)
-			}
-		} else {
-			dir := filepath.Join(dirname, fmt.Sprintf("%.0f%%", p.Percentage))
-			if err := os.MkdirAll(dir, os.ModeDir|0755); err != nil {
-				log.Fatal(err)
-			}
-			if err := writeMarkdown(p, dir); err != nil {
-				log.Fatal(err)
-			}
+		// silly I know
+		fileLock.Lock()
+		defer fileLock.Unlock()
 
-			jsonDir := filepath.Join(dir, "raw")
-			if err := os.MkdirAll(jsonDir, os.ModeDir|0755); err != nil {
-				log.Fatal(err)
-			}
-			if err := writeJSON(p, jsonDir); err != nil {
-				log.Fatal(err)
-			}
+		dir := filepath.Join(dirname, "raw")
+		if err := os.MkdirAll(dir, os.ModeDir|0755); err != nil {
+			log.Fatal(err)
+		}
+
+		if err := writeJSON(p, dir); err != nil {
+			log.Fatal(err)
 		}
 	})
 
@@ -85,7 +72,7 @@ func main() {
 }
 
 func writeJSON(p scraper.Product, path string) error {
-	name := sanitiseFilename(p.Name)
+	name := sanitiseFilename(p)
 	f, err := os.Create(filepath.Join(path, name+".json"))
 	if err != nil {
 		return err
@@ -103,7 +90,7 @@ func writeJSON(p scraper.Product, path string) error {
 }
 
 func writeMarkdown(p scraper.Product, path string) error {
-	name := sanitiseFilename(p.Name)
+	name := sanitiseFilename(p)
 	f, err := os.Create(filepath.Join(path, name+".md"))
 	if err != nil {
 		return err
@@ -117,6 +104,6 @@ func writeMarkdown(p scraper.Product, path string) error {
 	return nil
 }
 
-func sanitiseFilename(name string) string {
-	return safeFilenameReplaceRegex.ReplaceAllString(name, "-")
+func sanitiseFilename(p scraper.Product) string {
+	return safeFilenameReplaceRegex.ReplaceAllString(p.Name+"-"+p.CatID+"-"+p.ProdID, "-")
 }

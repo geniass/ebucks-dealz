@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"math"
+	"net"
 	"net/http"
 	"os"
 	"regexp"
@@ -16,6 +17,7 @@ import (
 	"time"
 
 	"github.com/gocolly/colly/v2"
+	"github.com/gocolly/colly/v2/debug"
 	"github.com/gocolly/colly/v2/queue"
 )
 
@@ -45,6 +47,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/productSelected(Json)?\.do.*`),
 		),
 		colly.UserAgent("Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0"),
+		colly.Debugger(&debug.LogDebugger{}),
 	}
 
 	if cacheDir != "" {
@@ -61,16 +64,30 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		q:           q,
 		mutex:       &sync.Mutex{},
 		urlBackoffs: make(map[string]int),
+		links:       make(map[string]int),
+		scraped:     make(map[string]int),
 	}
 
 	// somehow cookies are causing weird concurrency issues where the wrong response body gets used
 	s.colly.DisableCookies()
 
+	s.colly.WithTransport(&http.Transport{
+		DialContext: (&net.Dialer{
+			Timeout:   300 * time.Second,
+			KeepAlive: 300 * time.Second,
+		}).DialContext,
+		MaxIdleConns:          100,
+		IdleConnTimeout:       900 * time.Second,
+		TLSHandshakeTimeout:   300 * time.Second,
+		ExpectContinueTimeout: 100 * time.Second,
+		ResponseHeaderTimeout: 300 * time.Second,
+	})
+
 	s.colly.Limit(&colly.LimitRule{
 		DomainGlob:  "*",
 		Parallelism: threads,
-		Delay:       1 * time.Second,
-		RandomDelay: 1 * time.Second,
+		Delay:       2 * time.Second,
+		RandomDelay: 5 * time.Second,
 	})
 
 	// the ebucks website redirects to a generic error page on error (including "not found" and "service unavailable")
@@ -117,13 +134,36 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		if err := r.Request.Retry(); err != nil {
 			fmt.Fprintln(os.Stderr, "ERROR while retrying:", err)
 		}
+
+		r.Ctx.Put("attempts", numRetries)
 	})
+
+	s.urlChan = make(chan string)
+	go func() {
+		f, err := os.Create("urls.txt")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+		for url := range s.urlChan {
+			f.WriteString(url + "\n")
+			f.Sync()
+		}
+	}()
 
 	s.colly.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Request.AbsoluteURL(e.Attr("href"))
 		link = cleanCategorySelectedUrl(link)
 		err := s.visit(link)
-		if err != nil && !(errors.Is(err, colly.ErrAlreadyVisited) || errors.Is(err, colly.ErrNoURLFiltersMatch) || errors.Is(err, colly.ErrMissingURL)) {
+
+		if err == nil {
+			fmt.Println("FOUND LINK", e.Request.AbsoluteURL(link), e.ChildAttr("img", "alt"))
+			s.mutex.Lock()
+			s.links[link] = 1
+			s.mutex.Unlock()
+
+			s.urlChan <- link + " " + e.Request.URL.String()
+		} else if !(errors.Is(err, colly.ErrAlreadyVisited) || errors.Is(err, colly.ErrNoURLFiltersMatch) || errors.Is(err, colly.ErrMissingURL)) {
 			fmt.Fprintln(os.Stderr, "ERROR", err, link)
 		}
 	})
@@ -137,6 +177,21 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		cid := e.ChildAttr("input[name=catId]", "value")
 		if pid != urlProdId || cid != urlCatId {
 			log.Fatalf("prodId or catId mismatch! pid=%s (%s) cid=%s (%s)\n", pid, cid, urlProdId, urlCatId)
+		}
+
+		fmt.Printf("Found product: URL=%q NAME=%q\n", e.Request.URL.String(), e.ChildText("h2.product-name"))
+		// if e.Request.URL.String() == "https://www.ebucks.com/web/shop/productSelected.do?prodId=496816900&catId=1158501813" {
+		// 	log.Fatal(e.Response.Save("/tmp/index.html"))
+		// }
+		// https://www.ebucks.com/web/shop/productSelected.do?prodId=496816900&catId=1158501813
+
+		if e.Request.URL.String() == "https://www.ebucks.com/web/shop/productSelected.do?prodId=1173295004&catId=704981826" {
+			fmt.Println("HERE")
+		}
+
+		a := e.Response.Ctx.GetAny("attempts")
+		if a != nil && a.(int) != 0 {
+			fmt.Println("RETRYING:", e.Request.URL.String())
 		}
 
 		price := float64(-1)
@@ -168,6 +223,8 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		p := Product{
 			URL:     e.Request.URL.String(),
 			Name:    e.ChildText("h2.product-name"),
+			ProdID:  e.Request.URL.Query().Get("prodId"),
+			CatID:   e.Request.URL.Query().Get("catId"),
 			Price:   price,
 			Savings: savings,
 		}
@@ -181,21 +238,31 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 			hasDiscount = true
 		})
 
-		fmt.Printf("Found product: Name=%q Discounted=%v URL=%q\n", p.Name, hasDiscount, p.URL)
+		// fmt.Printf("Found product: Name=%q Discounted=%v URL=%q\n", p.Name, hasDiscount, p.URL)
 
+		// if hasDiscount {
+		// 	// queue fetching the JSON page for this product (for prices etc.) if the product is discounted
+		// 	fmt.Println("Fetching discounts...")
+		// 	link := e.Request.URL.String()
+		// 	if urlProdIdAndCatIdRegex.MatchString(link) {
+		// 		replaced := urlProdIdAndCatIdRegex.ReplaceAllString(link, "productSelectedJson.do?prodId=$1&catId=$2")
+		// 		e.Request.Ctx.Put(ctxScrapedDataKey, p)
+		// 		e.Request.Visit(replaced)
+		// 	}
+		// } else {
+		// 	// no more data to fetch, we are done
+		// 	callback(p)
+		// }
+
+		// TEMP HACK
+		s.mutex.Lock()
+		s.scraped[e.Request.URL.String()] = 1
+		s.mutex.Unlock()
 		if hasDiscount {
-			// queue fetching the JSON page for this product (for prices etc.) if the product is discounted
-			fmt.Println("Fetching discounts...")
-			link := e.Request.URL.String()
-			if urlProdIdAndCatIdRegex.MatchString(link) {
-				replaced := urlProdIdAndCatIdRegex.ReplaceAllString(link, "productSelectedJson.do?prodId=$1&catId=$2")
-				e.Request.Ctx.Put(ctxScrapedDataKey, p)
-				e.Request.Visit(replaced)
-			}
-		} else {
-			// no more data to fetch, we are done
-			callback(p)
+			p.Percentage = 40
 		}
+		callback(p)
+		// END TEMP HACK
 	})
 
 	s.colly.OnRequest(func(r *colly.Request) {
@@ -237,6 +304,25 @@ func (s Scraper) Start() error {
 	}
 
 	s.colly.Wait()
+	close(s.urlChan)
+	time.Sleep(10 * time.Second)
+	f, err := os.Create("links.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for k := range s.links {
+		f.WriteString(k + "\n")
+	}
+	f.Close()
+
+	f, err = os.Create("scraped.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for k := range s.scraped {
+		f.WriteString(k + "\n")
+	}
+	f.Close()
 
 	return nil
 }
