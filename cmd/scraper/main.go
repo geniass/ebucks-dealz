@@ -91,6 +91,7 @@ func writeJSON(p scraper.Product, path string) error {
 	defer f.Close()
 
 	encoder := json.NewEncoder(f)
+	encoder.SetEscapeHTML(false)
 	encoder.SetIndent("", "  ")
 	if err := encoder.Encode(p); err != nil {
 		return err
