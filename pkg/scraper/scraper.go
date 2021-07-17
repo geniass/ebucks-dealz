@@ -37,15 +37,20 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		options = append(options, colly.CacheDir(cacheDir))
 	}
 
-	c := colly.NewCollector(options...)
-	c.Limit(&colly.LimitRule{
+	s := Scraper{
+		colly:       colly.NewCollector(options...),
+		mutex:       &sync.Mutex{},
+		urlBackoffs: make(map[string]int),
+	}
+
+	s.colly.Limit(&colly.LimitRule{
 		DomainGlob:  "*",
 		Parallelism: threads,
 		Delay:       1 * time.Second,
 		RandomDelay: 1 * time.Second,
 	})
 
-	c.OnError(func(r *colly.Response, err error) {
+	s.colly.OnError(func(r *colly.Response, err error) {
 		// exponential backoff
 		s.mutex.Lock()
 		s.urlBackoffs[r.Request.URL.String()]++
@@ -60,12 +65,12 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		}
 	})
 
-	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
+	s.colly.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		c.Visit(e.Request.AbsoluteURL(link))
+		s.colly.Visit(e.Request.AbsoluteURL(link))
 	})
 
-	c.OnHTML(".product-detail-frame", func(e *colly.HTMLElement) {
+	s.colly.OnHTML(".product-detail-frame", func(e *colly.HTMLElement) {
 		p := Product{
 			URL:        e.Request.URL.String(),
 			Name:       e.ChildText("h2.product-name"),
@@ -79,7 +84,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		callback(p)
 	})
 
-	c.OnRequest(func(r *colly.Request) {
+	s.colly.OnRequest(func(r *colly.Request) {
 		fmt.Println("Visiting", r.URL.String())
 	})
 
