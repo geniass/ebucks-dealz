@@ -1,7 +1,7 @@
 
 # Ebucks Dealz
 ## DEFY C420 309L ECO Fridge /FREEZER with water dispenser
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=975468657&catId=704986856)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=973480244&catId=704986856)
 
 Price: R7199.00
 
