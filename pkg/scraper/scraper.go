@@ -2,6 +2,7 @@ package scraper
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"regexp"
 	"sync"
@@ -72,7 +73,17 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		s.visit(e.Request.AbsoluteURL(link))
 	})
 
-	s.colly.OnHTML(".product-detail-frame", func(e *colly.HTMLElement) {
+	s.colly.OnHTML("form[name=productOptionsBean]", func(e *colly.HTMLElement) {
+
+		// sanity check: URL IDs must match hidden form inputs otherwise we somehow ended up with the wrong page (?!)
+		urlProdId := e.Request.URL.Query().Get("prodId")
+		urlCatId := e.Request.URL.Query().Get("catId")
+		pid := e.ChildAttr("input[name=prodId]", "value")
+		cid := e.ChildAttr("input[name=catId]", "value")
+		if pid != urlProdId || cid != urlCatId {
+			log.Fatalf("prodId or catId mismatch! pid=%s (%s) cid=%s (%s)\n", pid, cid, urlProdId, urlCatId)
+		}
+
 		p := Product{
 			URL:        e.Request.URL.String(),
 			Name:       e.ChildText("h2.product-name"),
