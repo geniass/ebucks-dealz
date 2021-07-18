@@ -43,6 +43,9 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		urlBackoffs: make(map[string]int),
 	}
 
+	// somehow cookies are causing weird concurrency issues where the wrong response body gets used
+	s.colly.DisableCookies()
+
 	s.colly.Limit(&colly.LimitRule{
 		DomainGlob:  "*",
 		Parallelism: threads,
