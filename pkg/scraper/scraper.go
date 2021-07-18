@@ -8,16 +8,13 @@ import (
 	"time"
 
 	"github.com/gocolly/colly/v2"
+	"github.com/gocolly/colly/v2/queue"
 )
 
 type ProductPageCallbackFunc func(p Product)
 
 // cacheDir can be empty to disable caching.
 func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) Scraper {
-	async := false
-	if threads > 1 {
-		async = true
-	}
 
 	options := []colly.CollectorOption{
 		colly.AllowedDomains("www.ebucks.com"),
@@ -29,16 +26,18 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		colly.UserAgent("Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0"),
 	}
 
-	if async {
-		options = append(options, colly.Async())
-	}
-
 	if cacheDir != "" {
 		options = append(options, colly.CacheDir(cacheDir))
 	}
 
+	// InMemoryQueueStorage Init can't fail
+	q, _ := queue.New(
+		threads,
+		&queue.InMemoryQueueStorage{MaxSize: 10000},
+	)
 	s := Scraper{
 		colly:       colly.NewCollector(options...),
+		q:           q,
 		mutex:       &sync.Mutex{},
 		urlBackoffs: make(map[string]int),
 	}
@@ -70,7 +69,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 
 	s.colly.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		s.colly.Visit(e.Request.AbsoluteURL(link))
+		s.visit(e.Request.AbsoluteURL(link))
 	})
 
 	s.colly.OnHTML(".product-detail-frame", func(e *colly.HTMLElement) {
@@ -95,9 +94,19 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 }
 
 func (s Scraper) Start() error {
-	if err := s.colly.Visit("https://www.ebucks.com/web/shop/shopHome.do"); err != nil {
+	if err := s.visit("https://www.ebucks.com/web/shop/shopHome.do"); err != nil {
 		return err
 	}
+
+	if err := s.q.Run(s.colly); err != nil {
+		return err
+	}
+
 	s.colly.Wait()
+
 	return nil
+}
+
+func (s Scraper) visit(url string) error {
+	return s.q.AddURL(url)
 }
