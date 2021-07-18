@@ -3,7 +3,7 @@ name: Scrape Latest eBucks Deals
 on:
   workflow_dispatch:
   schedule:
-    - cron: '5 0/2 * * *'
+    - cron: '5 0/6 * * *'
 
 jobs:
   scrape:
@@ -30,7 +30,7 @@ jobs:
           key: ebucks-colly-cache
 
       - name: Scrape
-        timeout-minutes: 120
+        timeout-minutes: 240
         run: ./scraper -overwrite -dir ./data -threads 1
 
       - name: Commit and push any data changes
