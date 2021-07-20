@@ -31,7 +31,7 @@ jobs:
 
       - name: Scrape
         timeout-minutes: 240
-        run: ./scraper -overwrite -dir ./data -threads 32
+        run: ./scraper -overwrite -dir ./data -threads 8
 
       - name: Commit and push any data changes
         run: |-
