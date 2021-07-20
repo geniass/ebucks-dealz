@@ -1,9 +1,11 @@
 package scraper
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"math"
+	"os"
 	"regexp"
 	"sync"
 	"time"
@@ -11,6 +13,8 @@ import (
 	"github.com/gocolly/colly/v2"
 	"github.com/gocolly/colly/v2/queue"
 )
+
+var categorySelectedUrlCleanerRegex = regexp.MustCompile(`(.*categorySelected\.do).*(catId=\d+).*`)
 
 type ProductPageCallbackFunc func(p Product)
 
@@ -69,8 +73,12 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 	})
 
 	s.colly.OnHTML("a[href]", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		s.visit(e.Request.AbsoluteURL(link))
+		link := e.Request.AbsoluteURL(e.Attr("href"))
+		link = cleanCategorySelectedUrl(link)
+		err := s.visit(link)
+		if err != nil && !(errors.Is(err, colly.ErrAlreadyVisited) || errors.Is(err, colly.ErrNoURLFiltersMatch) || errors.Is(err, colly.ErrMissingURL)) {
+			fmt.Fprintln(os.Stderr, "ERROR", err, link)
+		}
 	})
 
 	s.colly.OnHTML("form[name=productOptionsBean]", func(e *colly.HTMLElement) {
@@ -120,4 +128,14 @@ func (s Scraper) Start() error {
 
 func (s Scraper) visit(url string) error {
 	return s.q.AddURL(url)
+}
+
+// categorySelected.do URLs sometimes contain random cruft that break the already-visited list and/or cause bad results to be returned
+// e.g. https://www.ebucks.com/web/shop/categorySelected.do;jsessionid=E1FECBC2B41C4EBBE86854E78CD8A882?catId=300&extraInfo=cellphone_number
+func cleanCategorySelectedUrl(url string) string {
+	matches := categorySelectedUrlCleanerRegex.FindStringSubmatch(url)
+	if len(matches) != 3 {
+		return url
+	}
+	return matches[1] + "?" + matches[2]
 }
