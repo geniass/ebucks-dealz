@@ -83,7 +83,7 @@ func main() {
 }
 
 func writeJSON(p scraper.Product, path string) error {
-	name := safeFilenameReplaceRegex.ReplaceAllString(p.Name, "-")
+	name := sanitiseFilename(p.Name)
 	f, err := os.Create(filepath.Join(path, name+".json"))
 	if err != nil {
 		return err
@@ -101,7 +101,7 @@ func writeJSON(p scraper.Product, path string) error {
 }
 
 func writeMarkdown(p scraper.Product, path string) error {
-	name := safeFilenameReplaceRegex.ReplaceAllString(p.Name, "-")
+	name := sanitiseFilename(p.Name)
 	f, err := os.Create(filepath.Join(path, name+".md"))
 	if err != nil {
 		return err
@@ -113,4 +113,8 @@ func writeMarkdown(p scraper.Product, path string) error {
 	}
 
 	return nil
+}
+
+func sanitiseFilename(name string) string {
+	return safeFilenameReplaceRegex.ReplaceAllString(name, "-")
 }
