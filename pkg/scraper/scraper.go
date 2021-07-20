@@ -127,7 +127,18 @@ func (s Scraper) Start() error {
 }
 
 func (s Scraper) visit(url string) error {
-	return s.q.AddURL(url)
+	if visited, err := s.colly.HasVisited(url); err != nil {
+		return err
+	} else if visited {
+		return colly.ErrAlreadyVisited
+	}
+
+	for _, f := range s.colly.URLFilters {
+		if f.MatchString(url) {
+			return s.q.AddURL(url)
+		}
+	}
+	return colly.ErrNoURLFiltersMatch
 }
 
 // categorySelected.do URLs sometimes contain random cruft that break the already-visited list and/or cause bad results to be returned
