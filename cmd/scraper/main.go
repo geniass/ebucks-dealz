@@ -80,6 +80,8 @@ func main() {
 	if err := s.Start(); err != nil {
 		log.Fatal(err)
 	}
+	
+	log.Println("Done!")
 }
 
 func writeJSON(p scraper.Product, path string) error {
