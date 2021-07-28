@@ -65,6 +65,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		if req.URL.String() == "https://www.ebucks.com/web/eBucks/errors/globalExceptionPage.jsp" {
 			return fmt.Errorf("not following redirect (implies error) %q : %+v", req.URL.String(), req.Header)
 		}
+		fmt.Fprintf(os.Stderr, "Redirecting %s -> %s\n", via[0].URL.String(), req.URL.String())
 
 		return nil
 	})
