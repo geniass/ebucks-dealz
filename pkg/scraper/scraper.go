@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"net/http"
 	"os"
 	"regexp"
 	"sync"
@@ -13,6 +14,8 @@ import (
 	"github.com/gocolly/colly/v2"
 	"github.com/gocolly/colly/v2/queue"
 )
+
+const maxNumRetries int = 5
 
 var categorySelectedUrlCleanerRegex = regexp.MustCompile(`(.*categorySelected\.do).*(catId=\d+).*`)
 
@@ -57,12 +60,22 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		RandomDelay: 1 * time.Second,
 	})
 
+	// the ebucks website redirects to a generic error page on error (including "not found" and "service unavailable")
+	s.colly.SetRedirectHandler(func(req *http.Request, via []*http.Request) error {
+		return fmt.Errorf("not following redirect (implies error) %q : %+v", req.URL.String(), req.Header)
+	})
+
 	s.colly.OnError(func(r *colly.Response, err error) {
 		// exponential backoff
 		s.mutex.Lock()
 		s.urlBackoffs[r.Request.URL.String()]++
 		numRetries := s.urlBackoffs[r.Request.URL.String()]
 		s.mutex.Unlock()
+
+		if numRetries > maxNumRetries {
+			fmt.Fprintf(os.Stderr, "Max retries (%d) exceeded for URL %q\n", maxNumRetries, r.Request.URL.String())
+			return
+		}
 
 		duration := time.Duration(math.Pow(2, float64(numRetries))) * time.Second
 		fmt.Println("ERROR: Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err, "\nRetrying after %v", duration)
