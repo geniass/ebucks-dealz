@@ -78,10 +78,10 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		}
 
 		duration := time.Duration(math.Pow(2, float64(numRetries))) * time.Second
-		fmt.Println("ERROR: Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err, "\nRetrying after %v", duration)
+		fmt.Fprintf(os.Stderr, "ERROR: Request %q [%d] failed, retrying after %.0f s: %v", r.Request.URL.String(), r.StatusCode, duration.Seconds(), err)
 		time.Sleep(duration)
 		if err := r.Request.Retry(); err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, "ERROR while retrying:", err)
 		}
 	})
 
