@@ -8,8 +8,9 @@ import (
 )
 
 type Scraper struct {
-	colly *colly.Collector
-	q     *queue.Queue
+	startingURL string
+	colly       *colly.Collector
+	q           *queue.Queue
 
 	mutex       *sync.Mutex
 	urlBackoffs map[string]int

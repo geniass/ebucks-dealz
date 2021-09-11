@@ -41,10 +41,9 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 	options := []colly.CollectorOption{
 		colly.AllowedDomains("www.ebucks.com"),
 		colly.URLFilters(
-			regexp.MustCompile(`https://www\.ebucks\.com/web/eBucks$`),
-			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/shopHome\.do`),
-			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/categorySelected\.do.*`),
-			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/productSelected(Json)?\.do.*`),
+			regexp.MustCompile(`.*/web/shop/shopHome\.do`),
+			regexp.MustCompile(`.*/web/shop/categorySelected\.do.*`),
+			regexp.MustCompile(`.*/web/shop/productSelected(Json)?\.do.*`),
 		),
 		colly.UserAgent("Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0"),
 		colly.Debugger(&debug.LogDebugger{}),
@@ -60,6 +59,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		&queue.InMemoryQueueStorage{MaxSize: 10000},
 	)
 	s := Scraper{
+		startingURL: "https://www.ebucks.com/web/shop/shopHome.do",
 		colly:       colly.NewCollector(options...),
 		q:           q,
 		mutex:       &sync.Mutex{},
@@ -81,13 +81,6 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		TLSHandshakeTimeout:   300 * time.Second,
 		ExpectContinueTimeout: 100 * time.Second,
 		ResponseHeaderTimeout: 300 * time.Second,
-	})
-
-	s.colly.Limit(&colly.LimitRule{
-		DomainGlob:  "*",
-		Parallelism: threads,
-		Delay:       2 * time.Second,
-		RandomDelay: 5 * time.Second,
 	})
 
 	// the ebucks website redirects to a generic error page on error (including "not found" and "service unavailable")
@@ -294,8 +287,17 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 	return s
 }
 
+func (s Scraper) EnableLimits() {
+	s.colly.Limit(&colly.LimitRule{
+		DomainGlob:  "*",
+		Parallelism: s.q.Threads,
+		Delay:       2 * time.Second,
+		RandomDelay: 5 * time.Second,
+	})
+}
+
 func (s Scraper) Start() error {
-	if err := s.visit("https://www.ebucks.com/web/shop/shopHome.do"); err != nil {
+	if err := s.visit(s.startingURL); err != nil {
 		return err
 	}
 

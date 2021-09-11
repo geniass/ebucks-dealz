@@ -63,6 +63,7 @@ func main() {
 			log.Fatal(err)
 		}
 	})
+	s.EnableLimits()
 
 	if err := s.Start(); err != nil {
 		log.Fatal(err)
