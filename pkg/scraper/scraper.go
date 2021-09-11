@@ -169,7 +169,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		pid := e.ChildAttr("input[name=prodId]", "value")
 		cid := e.ChildAttr("input[name=catId]", "value")
 		if pid != urlProdId || cid != urlCatId {
-			log.Fatalf("prodId or catId mismatch! pid=%s (%s) cid=%s (%s)\n", pid, cid, urlProdId, urlCatId)
+			log.Fatalf("prodId or catId mismatch! pid: (formPID=%q urlPID=%q) cid: (formCID=%q urlCID=%q)\n", pid, urlProdId, cid, urlCatId)
 		}
 
 		fmt.Printf("Found product: URL=%q NAME=%q\n", e.Request.URL.String(), e.ChildText("h2.product-name"))
