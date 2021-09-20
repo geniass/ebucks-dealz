@@ -3,7 +3,7 @@
 ## BLACK+DECKER 850w 13mm Hammer Drill Keyless Chuck with Kitbox
 [Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1010838171&catId=1158501552)
 
-Price: R1099.00
+Price: R1059.00
 
 Savings: 
 
