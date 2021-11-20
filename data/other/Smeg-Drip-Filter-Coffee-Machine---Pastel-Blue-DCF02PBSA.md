@@ -1,9 +1,9 @@
 
 # Ebucks Dealz
 ## Smeg: Drip Filter Coffee Machine - Pastel Blue DCF02PBSA
-[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1231232994&catId=1196428103)
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1158881399&catId=704984897)
 
-Price: R4279.00
+Price: R3399.00
 
 Savings: 
 
