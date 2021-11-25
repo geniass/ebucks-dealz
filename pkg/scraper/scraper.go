@@ -67,7 +67,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		}
 		fmt.Fprintf(os.Stderr, "Redirecting %s -> %s\n", via[0].URL.String(), req.URL.String())
 
-		return nil
+		return fmt.Errorf("redirect means something is wrong: %+v", via[0].Header)
 	})
 
 	s.colly.OnError(func(r *colly.Response, err error) {

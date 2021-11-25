@@ -30,8 +30,12 @@ jobs:
           key: ebucks-colly-cache
 
       - name: Scrape
-        timeout-minutes: 240
-        run: ./scraper -overwrite -dir ./data -threads 8
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 240
+          max_attempts: 3
+          retry_on: error
+          command: ./scraper -overwrite -dir ./data -threads 8
 
       - name: Commit and push any data changes
         run: |-
