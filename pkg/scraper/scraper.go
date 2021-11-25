@@ -125,6 +125,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 
 	s.colly.OnRequest(func(r *colly.Request) {
 		fmt.Println("Visiting", r.URL.String())
+		r.Headers.Add("Cookie", "js=1637881630272")
 	})
 
 	return s
