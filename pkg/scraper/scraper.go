@@ -78,7 +78,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		s.mutex.Unlock()
 
 		if numRetries > maxNumRetries {
-			fmt.Fprintf(os.Stderr, "Max retries (%d) exceeded for URL %q\n", maxNumRetries, r.Request.URL.String())
+			log.Fatalf("Max retries (%d) exceeded for URL %q\n", maxNumRetries, r.Request.URL.String())
 			return
 		}
 
