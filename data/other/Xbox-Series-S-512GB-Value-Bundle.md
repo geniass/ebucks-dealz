@@ -1,0 +1,11 @@
+
+# Ebucks Dealz
+## Xbox Series S 512GB Value Bundle
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1234663545&catId=1233325618)
+
+Price: R7499.00
+
+Savings: 
+
+
+	

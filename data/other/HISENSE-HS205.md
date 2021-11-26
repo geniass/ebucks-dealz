@@ -1,0 +1,11 @@
+
+# Ebucks Dealz
+## HISENSE HS205
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1236823691&catId=829912895)
+
+Price: R1999.00
+
+Savings: 
+
+
+	

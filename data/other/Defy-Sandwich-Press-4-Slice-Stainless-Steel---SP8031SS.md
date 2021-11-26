@@ -1,0 +1,11 @@
+
+# Ebucks Dealz
+## Defy Sandwich Press 4 Slice Stainless Steel - SP8031SS
+[Product Page](https://www.ebucks.com/web/shop/productSelected.do?prodId=1232603857&catId=1233560628)
+
+Price: R819.00
+
+Savings: 
+
+
+	
