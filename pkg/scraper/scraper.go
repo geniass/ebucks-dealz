@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 	"sync"
 	"time"
 
@@ -65,7 +66,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 
 	// the ebucks website redirects to a generic error page on error (including "not found" and "service unavailable")
 	s.colly.SetRedirectHandler(func(req *http.Request, via []*http.Request) error {
-		if req.URL.String() == "https://www.ebucks.com/web/eBucks/errors/globalExceptionPage.jsp" {
+		if strings.Contains(req.URL.Path, "globalExceptionPage.jsp") {
 			return fmt.Errorf("not following redirect (implies error) %q : %+v : %w", req.URL.String(), req.Header, ErrRedirectToErrorPage)
 		}
 		fmt.Fprintf(os.Stderr, "Redirecting %s -> %s\n", via[0].URL.String(), req.URL.String())
