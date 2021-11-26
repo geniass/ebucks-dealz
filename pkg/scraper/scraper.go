@@ -31,6 +31,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 	options := []colly.CollectorOption{
 		colly.AllowedDomains("www.ebucks.com"),
 		colly.URLFilters(
+			regexp.MustCompile(`https://www\.ebucks\.com/web/eBucks$`),
 			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/shopHome\.do`),
 			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/categorySelected\.do.*`),
 			regexp.MustCompile(`https://www\.ebucks\.com/web/shop/productSelected\.do.*`),
