@@ -70,15 +70,18 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		if strings.Contains(req.URL.Path, "globalExceptionPage.jsp") {
 			return fmt.Errorf("not following redirect (implies error) %q : %+v : %w", req.URL.String(), req.Header, ErrRedirectToErrorPage)
 		}
-		fmt.Fprintf(os.Stderr, "Redirecting %s -> %s\n", via[0].URL.String(), req.URL.String())
+		fmt.Fprintf(os.Stderr, "Redirecting %s -> %s (%d redirects)\n", via[0].URL.String(), req.URL.String(), len(via))
 
-		if via[0].Response != nil {
-			body, err := ioutil.ReadAll(via[0].Response.Body)
-			if err != nil {
-				body = []byte("<ERROR READING BODY>")
+		for _, v := range via {
+			if v.Response != nil {
+				body, err := ioutil.ReadAll(v.Response.Body)
+				if err != nil {
+					body = []byte("<ERROR READING BODY>")
+				}
+				return fmt.Errorf("redirect means something is wrong: %+v\n%s", v.Response.Header, string(body))
 			}
-			return fmt.Errorf("redirect means something is wrong: %+v\n%s", via[0].Response.Header, string(body))
 		}
+
 		return fmt.Errorf("redirect but Response is nil for some reason: %+v", via)
 	})
 
