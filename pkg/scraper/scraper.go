@@ -1,7 +1,6 @@
 package scraper
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -83,11 +82,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 			}
 		}
 
-		j, err := json.Marshal(via)
-		if err != nil {
-			j = []byte("wat: " + err.Error())
-		}
-		return fmt.Errorf("redirect but Response is nil for some reason: %s", string(j))
+		return fmt.Errorf("redirect but Response is nil for some reason: %+v", via)
 	})
 
 	s.colly.OnError(func(r *colly.Response, err error) {
