@@ -79,7 +79,9 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 			}
 			return fmt.Errorf("redirect means something is wrong: %+v\n%s", via[0].Response.Header, string(body))
 		}
-		return fmt.Errorf("redirect but Response is nil for some reason: %+v", via)
+
+		log.Printf("WARNING: redirect but Response is nil for some reason: %+v\n", via)
+		return nil
 	})
 
 	s.colly.OnError(func(r *colly.Response, err error) {
