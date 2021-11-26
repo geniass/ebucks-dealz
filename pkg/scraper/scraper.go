@@ -3,6 +3,7 @@ package scraper
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
@@ -67,7 +68,11 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		}
 		fmt.Fprintf(os.Stderr, "Redirecting %s -> %s\n", via[0].URL.String(), req.URL.String())
 
-		return fmt.Errorf("redirect means something is wrong: %+v", via[0].Header)
+		body, err := ioutil.ReadAll(via[0].Response.Body)
+		if err != nil {
+			body = []byte("<ERROR READING BODY>")
+		}
+		return fmt.Errorf("redirect means something is wrong: %+v\n%s", via[0].Response.Header, string(body))
 	})
 
 	s.colly.OnError(func(r *colly.Response, err error) {
