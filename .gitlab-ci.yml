@@ -1,0 +1,44 @@
+image: golang:latest
+
+.go-cache:
+  variables:
+    GOPATH: $CI_PROJECT_DIR/.go
+  before_script:
+    - mkdir -p .go
+  cache:
+    paths:
+      - .go/pkg/mod/
+
+stages:
+  - test
+  - build
+  - run
+  - deploy
+
+wat:
+  stage: build
+  script:
+    - curl -vL https://www.ebucks.com/web/shop/shopHome.do
+
+compile:
+  stage: build
+  script:
+    - go build ./cmd/scraper
+  extends: .go-cache
+  artifacts:
+    paths:
+      - ./scraper
+
+scrape:
+  stage: run
+  needs:
+    - job: compile
+  script:
+    - ./scraper -overwrite -dir ./data -threads 8
+  cache:
+    paths:
+      - ./cache
+  artifacts:
+    paths:
+      - ./data
+
