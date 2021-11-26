@@ -22,6 +22,8 @@ var categorySelectedUrlCleanerRegex = regexp.MustCompile(`(.*categorySelected\.d
 
 type ProductPageCallbackFunc func(p Product)
 
+var ErrRedirectToErrorPage = errors.New("redirected to error page")
+
 // cacheDir can be empty to disable caching.
 func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) Scraper {
 
@@ -64,7 +66,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 	// the ebucks website redirects to a generic error page on error (including "not found" and "service unavailable")
 	s.colly.SetRedirectHandler(func(req *http.Request, via []*http.Request) error {
 		if req.URL.String() == "https://www.ebucks.com/web/eBucks/errors/globalExceptionPage.jsp" {
-			return fmt.Errorf("not following redirect (implies error) %q : %+v", req.URL.String(), req.Header)
+			return fmt.Errorf("not following redirect (implies error) %q : %+v : %w", req.URL.String(), req.Header, ErrRedirectToErrorPage)
 		}
 		fmt.Fprintf(os.Stderr, "Redirecting %s -> %s\n", via[0].URL.String(), req.URL.String())
 
@@ -81,6 +83,12 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		s.urlBackoffs[r.Request.URL.String()]++
 		numRetries := s.urlBackoffs[r.Request.URL.String()]
 		s.mutex.Unlock()
+
+		if errors.Is(err, ErrRedirectToErrorPage) {
+			// no need to retry because when we get redirected to the error page it means that page is completely broken
+			log.Println("Ignoring page due to redirect error: %w", err)
+			return
+		}
 
 		if numRetries > maxNumRetries {
 			log.Fatalf("Max retries (%d) exceeded for URL %q\n", maxNumRetries, r.Request.URL.String())
