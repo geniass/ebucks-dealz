@@ -43,6 +43,18 @@ scrape:
             # git push
             echo "Would have pushed data files"
           fi
+  cache:
+    paths:
+      - ./cache
+  artifacts:
+    paths:
+      - ./data
+
+pages:
+  stage: deploy
+  needs:
+    - job: scrape
+  script:
     - ./generate-web -data-dir ./data -output-dir ./public -path-prefix /ebucks-dealz
     - |
         if [ ! -z "$(git status --porcelain=v1 -- docs 2>/dev/null)" ]; then
@@ -53,10 +65,6 @@ scrape:
           # git push
           echo "Would have pushed web files"
         fi
-  cache:
-    paths:
-      - ./cache
   artifacts:
     paths:
-      - ./data
       - ./public
