@@ -90,21 +90,6 @@ func writeJSON(p scraper.Product, path string) error {
 	return nil
 }
 
-func writeMarkdown(p scraper.Product, path string) error {
-	name := sanitiseFilename(p)
-	f, err := os.Create(filepath.Join(path, name+".md"))
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	if err := markdownTemplate.Execute(f, p); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func sanitiseFilename(p scraper.Product) string {
 	return safeFilenameReplaceRegex.ReplaceAllString(p.Name+"-"+p.CatID+"-"+p.ProdID, "-")
 }
