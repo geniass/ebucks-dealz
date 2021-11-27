@@ -53,7 +53,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 	// InMemoryQueueStorage Init can't fail
 	q, _ := queue.New(
 		threads,
-		&queue.InMemoryQueueStorage{MaxSize: 10000000},
+		&StackQueueStorage{},
 	)
 	s := Scraper{
 		startingURL: "https://www.ebucks.com/web/shop/shopHome.do",
