@@ -16,7 +16,6 @@ import (
 	"time"
 
 	"github.com/gocolly/colly/v2"
-	"github.com/gocolly/colly/v2/debug"
 	"github.com/gocolly/colly/v2/queue"
 )
 
@@ -45,7 +44,6 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 			regexp.MustCompile(`.*/web/shop/productSelected(Discount)?\.do.*`),
 		),
 		colly.UserAgent("Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0"),
-		colly.Debugger(&debug.LogDebugger{}),
 	}
 
 	if cacheDir != "" {
