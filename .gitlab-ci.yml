@@ -43,7 +43,7 @@ scrape:
             # git push
             echo "Would have pushed data files"
           fi
-    - ./generate-web -data-dir ./data -output-dir ./docs -path-prefix /ebucks-dealz
+    - ./generate-web -data-dir ./data -output-dir ./public -path-prefix /ebucks-dealz
     - |
         if [ ! -z "$(git status --porcelain=v1 -- docs 2>/dev/null)" ]; then
           # git config user.name "Scraper"
@@ -59,4 +59,4 @@ scrape:
   artifacts:
     paths:
       - ./data
-      - ./docs
+      - ./public
