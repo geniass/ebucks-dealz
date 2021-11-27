@@ -1,7 +1,6 @@
 package scraper
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -43,7 +42,7 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		colly.URLFilters(
 			regexp.MustCompile(`.*/web/shop/shopHome\.do`),
 			regexp.MustCompile(`.*/web/shop/categorySelected\.do.*`),
-			regexp.MustCompile(`.*/web/shop/productSelected(Json)?\.do.*`),
+			regexp.MustCompile(`.*/web/shop/productSelected(Discount)?\.do.*`),
 		),
 		colly.UserAgent("Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0"),
 		colly.Debugger(&debug.LogDebugger{}),
@@ -222,66 +221,78 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 			Savings: savings,
 		}
 
-		// the ebucks site now splits the data into 2 sections
-		// the static html contains the product name and description etc.
-		// it also sometimes contains an empty HTML table for the discount prices
-		// in this case there is also a JSON page available containing the actual discount prices
-		hasDiscount := false
-		e.ForEach(`table#discount-table`, func(i int, h *colly.HTMLElement) {
-			hasDiscount = true
-		})
+		fmt.Printf("Found product: Name=%q URL=%q\n", p.Name, p.URL)
 
-		// fmt.Printf("Found product: Name=%q Discounted=%v URL=%q\n", p.Name, hasDiscount, p.URL)
-
-		// if hasDiscount {
-		// 	// queue fetching the JSON page for this product (for prices etc.) if the product is discounted
-		// 	fmt.Println("Fetching discounts...")
-		// 	link := e.Request.URL.String()
-		// 	if urlProdIdAndCatIdRegex.MatchString(link) {
-		// 		replaced := urlProdIdAndCatIdRegex.ReplaceAllString(link, "productSelectedJson.do?prodId=$1&catId=$2")
-		// 		e.Request.Ctx.Put(ctxScrapedDataKey, p)
-		// 		e.Request.Visit(replaced)
-		// 	}
-		// } else {
-		// 	// no more data to fetch, we are done
-		// 	callback(p)
-		// }
-
-		// TEMP HACK
-		s.mutex.Lock()
-		s.scraped[e.Request.URL.String()] = 1
-		s.mutex.Unlock()
-		if hasDiscount {
-			p.Percentage = 40
+		// its no longer json, they now sometimes return html fragments
+		// so we have to make a request to the below url and if stuff is returned its on discount
+		// which means we always have to make the request, so just do it here
+		// queue fetching the HTML table page fragment for this product (for prices etc.) if the product is discounted
+		link := e.Request.URL.String()
+		if urlProdIdAndCatIdRegex.MatchString(link) {
+			replaced := urlProdIdAndCatIdRegex.ReplaceAllString(link, "productSelectedDiscount.do?prodId=$1&catId=$2")
+			log.Printf("Fetching discounts: Name=%q URL=%q\n", p.Name, replaced)
+			e.Request.Ctx.Put(ctxScrapedDataKey, p)
+			e.Request.Visit(replaced)
 		}
-		callback(p)
-		// END TEMP HACK
 	})
 
 	s.colly.OnRequest(func(r *colly.Request) {
 		fmt.Println("Visiting", r.URL.String())
+
+		// these headers are very important for some reason
 		r.Headers.Add("Cookie", "js=1637881630272")
+		r.Headers.Add("Referer", r.URL.String())
 	})
 
-	s.colly.OnResponse(func(r *colly.Response) {
-		// try get the partial product info that was scraped and continue parsing the JSON response
-		c, ok := r.Ctx.GetAny(ctxScrapedDataKey).(Product)
+	s.colly.OnHTML("table#discount-table", func(e *colly.HTMLElement) {
+		// try get the partial product info that was scraped and continue parsing the partial HTML response
+		c, ok := e.Request.Ctx.GetAny(ctxScrapedDataKey).(Product)
 		if !ok {
+			log.Printf("WARNING: OnHTML(table#discount-table): could not get partial product info from ctx: URL=%q\n", e.Request.URL)
 			return
 		}
 
-		pd := ebucksProductDetail{}
-		if err := json.Unmarshal(r.Body, &pd); err != nil {
-			fmt.Println("ERROR: fetching json product detail:", err)
-			r.Request.Abort()
-		}
+		discounts := []ebucksDiscount{}
+		e.ForEach("div > table > tbody", func(i int, h *colly.HTMLElement) {
+			d := ebucksDiscount{
+				Level:         i + 1,
+				Percent:       parsePercentage(h.ChildText("p.percentage")),
+				EbucksPrice:   parseEbucksValue(h.ChildText("td.col2 > span.eBucksValue")),
+				EbucksSavings: parseEbucksValue(h.ChildText("td.col4 > span.eBucksValue")),
+			}
+			discounts = append(discounts, d)
+		})
 
-		discount := pd.ProductDetail.Discount[len(pd.ProductDetail.Discount)-1]
+		discount := discounts[len(discounts)-1]
 		c.Percentage = float64(discount.Percent)
 		c.Price = discount.RandPrice()
 		c.Savings = discount.RandSavings()
 
 		callback(c)
+	})
+
+	s.colly.OnResponse(func(r *colly.Response) {
+		if !strings.Contains(r.Request.URL.Path, "productSelectedDiscount.do") {
+			return
+		}
+
+		log.Println("HELLO!", r.Request.URL)
+
+		// need to test if the response contains an HTML table containing discount info
+		// if there is, we don't do the callback here because it will be called by the HTML handler for the discount table
+		if !strings.Contains(string(r.Body), "table") {
+			fmt.Println(string(r.Body))
+			// no discount
+			// try get the partial product info that was scraped
+			c, ok := r.Ctx.GetAny(ctxScrapedDataKey).(Product)
+			if !ok {
+				log.Printf("WARNING: OnResponse: could not get partial product info from ctx: URL=%q\n", r.Request.URL)
+				return
+			}
+			callback(c)
+			return
+		}
+		log.Println("DISCOUNT!", r.Request.URL)
 	})
 
 	return s
@@ -342,6 +353,25 @@ func (s Scraper) visit(url string) error {
 		}
 	}
 	return colly.ErrNoURLFiltersMatch
+}
+
+func parsePercentage(p string) int {
+	s := strings.ReplaceAll(p, "%", "")
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		return 0
+	}
+	return i
+}
+
+func parseEbucksValue(s string) int {
+	s = strings.ReplaceAll(s, "eB", "")
+	s = strings.ReplaceAll(s, " ", "")
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		return -1
+	}
+	return i
 }
 
 // categorySelected.do URLs sometimes contain random cruft that break the already-visited list and/or cause bad results to be returned
