@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"io"
 	"io/fs"
 	"log"
@@ -10,6 +11,7 @@ import (
 	"path/filepath"
 
 	dataio "github.com/geniass/ebucks-dealz/pkg/io"
+	"github.com/geniass/ebucks-dealz/pkg/scraper"
 	"github.com/geniass/ebucks-dealz/pkg/web"
 )
 
@@ -32,20 +34,28 @@ func main() {
 		log.Fatal(err)
 	}
 
+	dataDir := filepath.Join(*dataDirNameArg, "raw")
+	ps, err := dataio.LoadFromDir(dataDir)
+	if errors.Is(err, fs.ErrNotExist) {
+		log.Printf("WARNING: data dir %q does not exist, assuming no deals...\n", dataDir)
+	} else if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(ps)
+
 	{
-		// Discounted products
-		dataDir := filepath.Join(*dataDirNameArg, "40%/raw")
-		ps, err := dataio.LoadFromDir(dataDir)
-		if errors.Is(err, fs.ErrNotExist) {
-			log.Printf("WARNING: data dir %q does not exist, assuming no deals...\n", dataDir)
-		} else if err != nil {
-			log.Fatal(err)
+		discounted := []scraper.Product{}
+		for _, p := range ps {
+			if p.Percentage > 0 {
+				discounted = append(discounted, p)
+			}
 		}
-		err = renderToFile(*ouputDirArg, "discount.html", func(w io.Writer) error {
+
+		err := renderToFile(*ouputDirArg, "discount.html", func(w io.Writer) error {
 			c := web.DealzContext{
 				BaseContext: web.BaseContext{PathPrefix: *pagePathPrefixArg},
 				Title:       "Discounted (40%)",
-				Products:    ps,
+				Products:    discounted,
 			}
 			return web.RenderDealz(w, c)
 		})
@@ -55,19 +65,18 @@ func main() {
 	}
 
 	{
-		// Other products
-		dataDir := filepath.Join(*dataDirNameArg, "other/raw")
-		ps, err := dataio.LoadFromDir(dataDir)
-		if errors.Is(err, fs.ErrNotExist) {
-			log.Printf("WARNING: data dir %q does not exist, assuming no deals...\n", dataDir)
-		} else if err != nil {
-			log.Fatal(err)
+		otherProducts := []scraper.Product{}
+		for _, p := range ps {
+			if p.Percentage == 0 {
+				otherProducts = append(otherProducts, p)
+			}
 		}
-		err = renderToFile(*ouputDirArg, "other.html", func(w io.Writer) error {
+
+		err := renderToFile(*ouputDirArg, "other.html", func(w io.Writer) error {
 			c := web.DealzContext{
 				BaseContext: web.BaseContext{PathPrefix: *pagePathPrefixArg},
 				Title:       "Other Products",
-				Products:    ps,
+				Products:    otherProducts,
 			}
 			return web.RenderDealz(w, c)
 		})
