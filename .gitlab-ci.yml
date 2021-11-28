@@ -9,6 +9,10 @@ image: golang:latest
     paths:
       - .go/pkg/mod/
 
+.schedule-only:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
 stages:
   - test
   - build
@@ -30,8 +34,7 @@ scrape:
   stage: run
   needs:
     - job: compile
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
+  extends: .schedule-only
   script:
     - ./scraper -overwrite -dir ./data -threads 8
     - |
@@ -55,6 +58,7 @@ pages:
   needs:
     - job: compile
     - job: scrape
+  extends: .schedule-only
   script:
     - ./generate-web -data-dir ./data -output-dir ./public -path-prefix /ebucks-dealz
     - |
