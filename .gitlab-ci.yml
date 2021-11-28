@@ -30,32 +30,32 @@ compile:
       - ./scraper
       - ./generate-web
 
-scrape:
-  stage: run
-  needs:
-    - job: compile
-  extends: .schedule-only
-  script:
-    - ./scraper -overwrite -dir ./data -threads 8
-    - |
-          if [ ! -z "$(git status --porcelain=v1 -- data 2>/dev/null)" ]; then
-            # git config user.name "Scraper"
-            # git config user.email "actions@users.noreply.github.com"
-            # git add -A data
-            # git commit -m "Latest data"
-            # git push
-            echo "Would have pushed data files"
-          fi
-  cache:
-    paths:
-      - ./cache
-  artifacts:
-    paths:
-      - ./data
+# scrape:
+#   stage: run
+#   needs:
+#     - job: compile
+#   extends: .schedule-only
+#   script:
+#     - ./scraper -overwrite -dir ./data -threads 8
+#     - |
+#           if [ ! -z "$(git status --porcelain=v1 -- data 2>/dev/null)" ]; then
+#             # git config user.name "Scraper"
+#             # git config user.email "actions@users.noreply.github.com"
+#             # git add -A data
+#             # git commit -m "Latest data"
+#             # git push
+#             echo "Would have pushed data files"
+#           fi
+#   cache:
+#     paths:
+#       - ./cache
+#   artifacts:
+#     paths:
+#       - ./data
 
 pages:
   stage: deploy
-  extends: .schedule-only
+  # extends: .schedule-only
   script:
     - ./generate-web -data-dir ./data -output-dir ./public -path-prefix /ebucks-dealz
     - |
