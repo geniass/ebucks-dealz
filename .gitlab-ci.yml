@@ -53,6 +53,7 @@ scrape:
 pages:
   stage: deploy
   needs:
+    - job: compile
     - job: scrape
   script:
     - ./generate-web -data-dir ./data -output-dir ./public -path-prefix /ebucks-dealz
