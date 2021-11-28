@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 
 	dataio "github.com/geniass/ebucks-dealz/pkg/io"
 	"github.com/geniass/ebucks-dealz/pkg/scraper"
@@ -26,9 +27,12 @@ func main() {
 		log.Fatal(err)
 	}
 
+	lastUpdated := time.Now()
+	baseContext := web.BaseContext{PathPrefix: *pagePathPrefixArg}
+
 	// Home page
 	err := renderToFile(*ouputDirArg, "index.html", func(w io.Writer) error {
-		return web.RenderHome(w, web.BaseContext{PathPrefix: *pagePathPrefixArg})
+		return web.RenderHome(w, baseContext)
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -53,8 +57,9 @@ func main() {
 
 		err := renderToFile(*ouputDirArg, "discount.html", func(w io.Writer) error {
 			c := web.DealzContext{
-				BaseContext: web.BaseContext{PathPrefix: *pagePathPrefixArg},
+				BaseContext: baseContext,
 				Title:       "Discounted (40%)",
+				LastUpdated: lastUpdated,
 				Products:    discounted,
 			}
 			return web.RenderDealz(w, c)
@@ -74,8 +79,9 @@ func main() {
 
 		err := renderToFile(*ouputDirArg, "other.html", func(w io.Writer) error {
 			c := web.DealzContext{
-				BaseContext: web.BaseContext{PathPrefix: *pagePathPrefixArg},
+				BaseContext: baseContext,
 				Title:       "Other Products",
+				LastUpdated: lastUpdated,
 				Products:    otherProducts,
 			}
 			return web.RenderDealz(w, c)

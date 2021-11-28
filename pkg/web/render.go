@@ -4,6 +4,7 @@ import (
 	"embed"
 	"html/template"
 	"io"
+	"time"
 
 	"github.com/geniass/ebucks-dealz/pkg/scraper"
 )
@@ -17,8 +18,17 @@ type BaseContext struct {
 
 type DealzContext struct {
 	BaseContext
-	Title    string
-	Products []scraper.Product
+	Title       string
+	LastUpdated time.Time
+	Products    []scraper.Product
+}
+
+func (c DealzContext) FormattedLastUpdated() string {
+	loc, err := time.LoadLocation("Africa/Johannesburg")
+	if err != nil {
+		loc = time.UTC
+	}
+	return c.LastUpdated.In(loc).Format("2006-01-02T15:04:05 MST")
 }
 
 func RenderDealz(w io.Writer, c DealzContext) error {

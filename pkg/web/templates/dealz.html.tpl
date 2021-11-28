@@ -5,6 +5,8 @@
 {{define "content"}}
 <h4>{{.Title}}</h4>
 
+<h6>Last Updated: {{.FormattedLastUpdated}}</h6>
+
 <table class="striped">
     <thead>
         <tr>
