@@ -57,6 +57,7 @@ pages:
   stage: deploy
   extends: .schedule-only
   needs:
+    - job: compile
     - job: scrape
   script:
     - ./generate-web -data-dir ./data -output-dir ./public -path-prefix /ebucks-dealz
