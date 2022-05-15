@@ -9,8 +9,13 @@ import (
 	"github.com/geniass/ebucks-dealz/pkg/scraper"
 )
 
-func LoadFromDir(dir string) ([]scraper.Product, error) {
-	var ps []scraper.Product
+type ProductWithPath struct {
+	scraper.Product
+	Path string
+}
+
+func LoadFromDir(dir string) ([]ProductWithPath, error) {
+	var ps []ProductWithPath
 	err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -31,7 +36,7 @@ func LoadFromDir(dir string) ([]scraper.Product, error) {
 		if err := dec.Decode(&p); err != nil {
 			return err
 		}
-		ps = append(ps, p)
+		ps = append(ps, ProductWithPath{Product: p, Path: path})
 		return nil
 	})
 

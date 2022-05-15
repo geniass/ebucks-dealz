@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/geniass/ebucks-dealz/pkg/io"
+	"github.com/geniass/ebucks-dealz/pkg/scraper"
 	"github.com/geniass/ebucks-dealz/pkg/web"
 )
 
@@ -22,11 +23,16 @@ func main() {
 	})
 
 	http.HandleFunc("/discount", func(rw http.ResponseWriter, r *http.Request) {
-		ps, err := io.LoadFromDir("data/raw")
+		loadedProduct, err := io.LoadFromDir("data/raw")
 		if err != nil {
 			log.Println(err)
 			rw.WriteHeader(http.StatusInternalServerError)
 			return
+		}
+
+		ps := []scraper.Product{}
+		for _, p := range loadedProduct {
+			ps = append(ps, p.Product)
 		}
 
 		if err := web.RenderDealz(rw, web.DealzContext{
@@ -41,11 +47,16 @@ func main() {
 	})
 
 	http.HandleFunc("/other", func(rw http.ResponseWriter, r *http.Request) {
-		ps, err := io.LoadFromDir("data/raw")
+		loadedProduct, err := io.LoadFromDir("data/raw")
 		if err != nil {
 			log.Println(err)
 			rw.WriteHeader(http.StatusInternalServerError)
 			return
+		}
+
+		ps := []scraper.Product{}
+		for _, p := range loadedProduct {
+			ps = append(ps, p.Product)
 		}
 
 		if err := web.RenderDealz(rw, web.DealzContext{

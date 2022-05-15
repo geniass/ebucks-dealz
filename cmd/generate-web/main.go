@@ -45,13 +45,15 @@ func main() {
 	} else if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(ps)
+	for _, p := range ps {
+		fmt.Printf("%+v\n", p)
+	}
 
 	{
 		discounted := []scraper.Product{}
 		for _, p := range ps {
 			if p.Percentage > 0 {
-				discounted = append(discounted, p)
+				discounted = append(discounted, p.Product)
 			}
 		}
 
@@ -73,7 +75,7 @@ func main() {
 		otherProducts := []scraper.Product{}
 		for _, p := range ps {
 			if p.Percentage == 0 {
-				otherProducts = append(otherProducts, p)
+				otherProducts = append(otherProducts, p.Product)
 			}
 		}
 
