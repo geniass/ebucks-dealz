@@ -113,13 +113,18 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 			return
 		}
 
+		if r.StatusCode >= 400 && r.StatusCode < 500 {
+			log.Printf("Ignoring page due to Not Found (Page=%q): %s\n", r.Request.URL, err)
+			return
+		}
+
 		if numRetries > maxNumRetries {
 			log.Fatalf("Max retries (%d) exceeded for URL %q\n", maxNumRetries, r.Request.URL.String())
 			return
 		}
 
 		duration := time.Duration(math.Pow(2, float64(numRetries))) * time.Second
-		fmt.Fprintf(os.Stderr, "ERROR: Request %q [%d] failed, retrying after %.0f s: %v", r.Request.URL.String(), r.StatusCode, duration.Seconds(), err)
+		fmt.Fprintf(os.Stderr, "ERROR: Request %q [%d] failed, retrying after %.0f s: %v\n", r.Request.URL.String(), r.StatusCode, duration.Seconds(), err)
 		time.Sleep(duration)
 		if err := r.Request.Retry(); err != nil {
 			fmt.Fprintln(os.Stderr, "ERROR while retrying:", err)
@@ -273,8 +278,6 @@ func NewScraper(cacheDir string, threads int, callback ProductPageCallbackFunc) 
 		if !strings.Contains(r.Request.URL.Path, "productSelectedDiscount.do") {
 			return
 		}
-
-		log.Println("HELLO!", r.Request.URL)
 
 		// need to test if the response contains an HTML table containing discount info
 		// if there is, we don't do the callback here because it will be called by the HTML handler for the discount table
