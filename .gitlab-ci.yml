@@ -36,6 +36,7 @@ scrape:
     - job: compile
   extends: .schedule-only
   script:
+    - find .
     - ./scraper -overwrite -dir ./data -threads 8
     - |
           if [ ! -z "$(git status --porcelain=v1 -- data 2>/dev/null)" ]; then
